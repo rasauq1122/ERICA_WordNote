@@ -4,10 +4,11 @@ public class Field {
    private Minion[] enemy;
    private int ally_minion;
    private int enemy_minion;
+   private int mode;
    
-   public Field(int difficulty)
+   public Field(int difficulty, int mode)
    {
-      // ³­ÀÌµµ¿¡ µû¸¥ ÇÏ¼öÀÎ °³¼ö ¼³Á¤
+	   // ë‚œì´ë„ì™€ ëª¨ë“œì— ë”°ë¼ í•˜ìˆ˜ì¸ì˜ ê°œìˆ˜ì™€ ì¢…ë£Œ ì¡°ê±´ ë³€ê²½
    }
    
    public boolean attack(String name_of_ally, String name_of_enemy)
@@ -17,7 +18,7 @@ public class Field {
       
       for (i = 0 ; i < ally_minion ; i++)
       {
-         if (ally[i].getName() == name_of_ally && ally[i].canAttack())
+         if (ally[i].getName().equals(name_of_ally) && ally[i].canAttack())
          {
             ok_ally = true;
             break;
@@ -26,17 +27,14 @@ public class Field {
       
       for (j = 0 ; j < enemy_minion ; j++)
       {
-         if (enemy[j].getName() == name_of_enemy)
+         if (enemy[j].getName().equals(name_of_enemy))
          {
             ok_enemy = true;
             break;
          }
       }
       
-      if (ok_ally && ok_enemy)
-      {
-         ally[i].attack(enemy[j]);
-      }
+      if (ok_ally && ok_enemy) ally[i].attack(enemy[j]);
       else return false;
       
       return true;
@@ -44,6 +42,30 @@ public class Field {
 
    public void minionDead(Minion dead_minion, boolean isAlly) 
    {
-      // Á×Àº ÇÏ¼öÀÎÀº ¹è¿­¿¡¼­ »èÁ¦ÇÏ°í ´Ù¸¥ ÇÏ¼öÀÎ¿¡°Ô ÇÏ¼öÀÎÀÇ Á×À½À» ¾Ë¸² (ÀÌº¥Æ® ´À³¦À¸·Î)
+	  if (isAlly)
+	  {
+		  int i;
+		  for (i = 0 ; i < ally_minion ; i++) if (ally[i] == dead_minion) break;
+		  for (int j = i ; j < ally_minion ; j++)
+		  {
+			  if (j < ally_minion-1) ally[j] = ally[j+1];
+			  else ally[j] = null;
+		  }
+		  ally_minion--;
+	  }
+	  else
+	  {
+		  int i;
+		  for (i = 0 ; i < enemy_minion ; i++) if (enemy[i] == dead_minion) break;
+		  for (int j = i ; j < enemy_minion ; j++)
+		  {
+			  if (j < enemy_minion-1) enemy[j] = enemy[j+1];  
+			  else enemy[j] = null;
+		  }
+		  ally_minion--;
+	  }
+	  dead_minion.i_am_dead();
+	  for (int j = 0 ; j < ally_minion ; j++) ally[j].somebody_dead(dead_minion);
+	  for (int j = 0 ; j < enemy_minion ; j++) enemy[j].somebody_dead(dead_minion);
    }
 }

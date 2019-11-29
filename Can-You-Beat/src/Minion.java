@@ -46,4 +46,8 @@ public class Minion {
       other.getDamage(this.getAttack(), this);
       this.getDamage(other.getAttack(), other);
    }
+   
+   public void i_am_dead() {}
+   
+   public void somebody_dead(Minion other) {}
 }
