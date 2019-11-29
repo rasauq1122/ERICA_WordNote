@@ -62,7 +62,7 @@ public class Field {
 			  if (j < enemy_minion-1) enemy[j] = enemy[j+1];  
 			  else enemy[j] = null;
 		  }
-		  ally_minion--;
+		  enemy_minion--;
 	  }
 	  dead_minion.i_am_dead();
 	  for (int j = 0 ; j < ally_minion ; j++) ally[j].somebody_dead(dead_minion);
