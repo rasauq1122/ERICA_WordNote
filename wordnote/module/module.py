@@ -1,4 +1,1 @@
-from module.add import *
-
-def test1():
-    print("hi")
+from module.note import *
