@@ -4,6 +4,9 @@ module_dir = os.getcwd()
 main_dir = os.getcwd().split("/module")[0]
 note_dir = main_dir+"/note"
 
+if not(os.path.isdir(note_dir)):
+    os.makedirs(note_dir)
+
 def addnote(note_name):
     os.chdir(note_dir)
     
