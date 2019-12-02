@@ -22,12 +22,16 @@ def addnote(note_name):
     
     if not os.path.isfile(note_dir+"/"+note_name+".txt"):
         note = open(note_name+".txt","w",encoding="UTF-8")
+        note.write("WORDNOTE NAME : "+note_name+"\nTHIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : 0")
         print("성공적으로 단어장를 만들었습니다. 단어장 이름 : "+note_name)
+        note.close()
     else :
         check = check_yes_or_no("이미 같은 이름의 단어장이 있습니다. 지우고 새로 만듭니까?")
         if check :
             note = open(note_name+".txt","w",encoding="UTF-8")
+            note.write("WORDNOTE NAME : "+note_name+"\nTHIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : 0")
             print("성공적으로 단어장를 만들었습니다. 단어장 이름 : "+note_name)
+            note.close()
         else :
             print("단어장을 새로 만들지 못했습니다.")
 
