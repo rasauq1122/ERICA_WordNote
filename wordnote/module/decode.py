@@ -17,10 +17,10 @@ def minus2max(given_int, max_len):
 
 def normalSplit(given_string, clue):
     where = given_string.find(clue)
-    if where == -1 or where == len(given_string) - 1:
+    if where == -1 :
         return [given_string]
     else :
-        return [given_string[:where],given_string[where+1:]]
+        return [given_string[:where],given_string[where+len(clue):]]
 
 def superSplit(given_string):
     len_over = len(given_string) + 1
