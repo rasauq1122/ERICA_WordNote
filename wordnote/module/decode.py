@@ -24,7 +24,7 @@ def normalSplit(given_string, clue):
 
 def superSplit(given_string):
     len_over = len(given_string) + 1
-    meaning_list = []
+    all_meaning_list = []
     now_meaning_list = []
     while True:
         if minus2max(given_string.find(";"),len_over) < minus2max(given_string.find(","),len_over) :
@@ -32,7 +32,7 @@ def superSplit(given_string):
             if splited[0].strip() != "" :
                 now_meaning_list = now_meaning_list + [splited[0].strip()]
             if now_meaning_list != [] :
-                meaning_list = meaning_list + [now_meaning_list]
+                all_meaning_list = all_meaning_list + [now_meaning_list]
             now_meaning_list = []
             if len(splited) == 1:
                 break
@@ -47,17 +47,35 @@ def superSplit(given_string):
             else :
                 given_string = splited[1][:]
     if now_meaning_list != [] :
-        meaning_list = meaning_list + [now_meaning_list]
-    return meaning_list
+        all_meaning_list = all_meaning_list + [now_meaning_list]
+    return all_meaning_list
 
 
 def addDecoding(setting): # setting은 올바른 입력이라는 것이 보장될 예정
-    word_name = setting.split(" -")[0]
-    part_of_class = [word_name, [], [], [], [], [], [], [], [], []]
-    class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "tag":9}
+    splited = setting.split(" -")
+    
+    class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "tag":9} # 레벨도 있으면 좋긴 할텐데
+    part_of_class = [splited[0], [], [], [], [], [], [], [], []]
+    tags = [[], [], [], [], [], [], [], [], []]
+    counts = [0, 0, 0, 0, 0, 0, 0, 0]
+    splited.remove(splited[0])
 
-    now_string = setting[:]
-    while now_string.find(" -") != -1 :
-        working_string = now_string.split(" -")[0]
-        now_class = class_dictionary[working_string.split(" ")[0]]
-        # superSplit 을 이용하여 단어 추가 및 tag 예외 처리 필요 
+    log = [0, 0, 0]
+    for details in splited :
+        now_class = class_dictionary[normalSplit(details," ")[0]]
+        if now_class == 9 :
+            now_tag = normalSplit(details," ")[1].split(",")
+            length = len(now_tag)
+            for i in range(length) :
+                now_tag[i] = now_tag[i].strip()
+            while "" in now_tag :
+                now_tag.remove("")
+            if now_tag != [] :
+                tags[log[0]] = tags[log[0]] + [log[1],log[2],[now_tag]]
+        elif len(normalSplit(details," ")) == 2 :
+            now_meaning = superSplit(normalSplit(details," ")[1])
+            now_count = counts[now_class-1]
+            part_of_class[now_class] = part_of_class[now_class] + now_meaning
+            log = [now_class, now_count, now_count + len(now_meaning)-1]
+            counts[now_class-1] = now_count + len(now_meaning)
+    return part_of_class + [tags]
