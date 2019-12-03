@@ -23,6 +23,8 @@ def connectnote(note_name):
         for now_string in origin_string :
             if now_string.find("THIS IS THE END OF WORDNOTE.") != -1 :
                 total = now_string.split(" TOTAL NUMBER OF WORDS : ")[1]
+                if total.find("\n") != -1:
+                    total = total.split("\n")[0]
                 if total.isdigit() :
                     word_count = int(total)
                 break
@@ -51,7 +53,7 @@ def disconnectnote():
         connected_note.close()
         for now_string in connected_string :
             now_note.write(now_string)
-        now_note.write("THIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : "+str(word_count))
+        now_note.write("THIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : "+str(word_count)+"\n")
         now_note.close()
         os.remove(note_dir+"/"+now_note_name+"_working-on.txt")
         print("접근한 단어장에서 벗어납니다. 단어장 이름 : "+now_note_name)
