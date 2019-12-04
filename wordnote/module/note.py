@@ -1,53 +1,51 @@
-import os
+from module.tool import *
 
-module_dir = os.getcwd()
-main_dir = os.getcwd().split("/module")[0]
-note_dir = main_dir+"/note"
-
-if not(os.path.isdir(note_dir)) :
+if not(os.path.isdir(note_dir)) : # 추후 부팅 과정으로 넘길 것
     os.makedirs(note_dir)
-
-def check_yes_or_no(notice):
-    check = input(notice+" [y/n] ")
-    while not check in ["y","yes","n","no"] :
-        check = input("다음 중 하나를 입력해주세요. [y, yes, n, no] ")
-        if check.strip().isalpha() :
-            check = check.strip().lower()
-        else :
-            continue
-    return check in ["y","yes"]
 
 def addnote(note_name):
     os.chdir(note_dir)
-    
-    if not os.path.isfile(note_dir+"/"+note_name+".txt"):
-        note = open(note_name+".txt","w",encoding="UTF-8")
-        note.write("THIS IS THE START OF WORDNOTE. WORDNOTE NAME : "+note_name+"\nTHIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : 0\n")
-        print("성공적으로 단어장를 만들었습니다. 단어장 이름 : "+note_name)
-        note.close()
-    else :
-        check = check_yes_or_no("이미 같은 이름의 단어장이 있습니다. 지우고 새로 만듭니까?")
-        if check :
-            note = open(note_name+".txt","w",encoding="UTF-8")
-            note.write("THIS IS THE START OF WORDNOTE. WORDNOTE NAME : "+note_name+"\nTHIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : 0\n")
-            print("성공적으로 단어장를 만들었습니다. 단어장 이름 : "+note_name)
-            note.close()
-        else :
-            print("단어장을 새로 만들지 못했습니다.")
-
+    note = open(note_name+".txt","w",encoding="UTF-8")
+    note.write("THIS IS THE START OF WORDNOTE. WORDNOTE NAME : "+note_name+"\nTHIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : 0\n")
+    note.close()
+    print("성공적으로 단어장를 만들었습니다. 단어장 이름 : "+note_name)
     os.chdir(module_dir)
 
 def removenote(note_name):
     os.chdir(note_dir)
+    os.remove(note_dir+"/"+note_name+".txt")
+    print("성공적으로 단어장을 삭제하였습니다. 단어장 이름 : "+note_name)
+    os.chdir(module_dir)
 
-    if os.path.isfile(note_dir+"/"+note_name+".txt") :
-        check = check_yes_or_no("정말 단어장을 삭제하시겠습니까?")
-        if check :
-            os.remove(note_dir+"/"+note_name+".txt")
-            print("단어장을 삭제하였습니다. 단어장 이름 : "+note_name)
-        else :
-            print("단어장을 삭제하지 않았습니다.")
-    else :
-        print("존재하지 않은 단어장입니다.")
+def connectnote(note_name):
+    os.chdir(note_dir)
+    working_note = open(note_name+".working-on.txt","w",encoding="UTF-8")
+    origin_note = open(note_name+".txt","r",encoding="UTF-8")
+    origin_note_line = origin_note.readlines()
+    origin_note.close()
+    length = len(origin_note_line) - 1
+    for i in range(length) :
+        working_note.write(origin_note_line[i])
+    working_note.close()
+    global now_note_name, word_count
+    now_note_name = note_name
+    word_count = length - 1
+    print("성공적으로 단어장에 접근했습니다. 단어장 이름 : "+now_note_name)
+    os.chdir(module_dir)
 
+def disconnectnote():
+    os.chdir(note_dir)
+    global now_note_name, word_count
+    working_note = open(now_note_name+".working-on.txt","r",encoding="UTF-8")
+    origin_note = open(now_note_name+".txt","w",encoding="UTF-8")
+    working_note_line = working_note.readlines()
+    working_note.close()
+    for now_line in working_note_line :
+        origin_note.write(now_line)
+    origin_note.write("THIS IS THE END OF WORDNOTE. TOTAL NUMBER OF WORDS : "+str(word_count)+"\n")
+    origin_note.close()
+    os.remove(note_dir+"/"+now_note_name+".working-on.txt")
+    print("접근한 단어장에서 벗어납니다. 단어장 이름 : "+now_note_name)
+    now_note_name = ""
+    word_count = -1
     os.chdir(module_dir)

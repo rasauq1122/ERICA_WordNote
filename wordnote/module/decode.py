@@ -1,3 +1,5 @@
+from module.tool import *
+
 # n : 명사
 # v : 동사
 # a : 형용사
@@ -14,13 +16,6 @@ def minus2max(given_int, max_len):
         return max_len
     else :
         return given_int
-
-def normalSplit(given_string, clue):
-    where = given_string.find(clue)
-    if where == -1 :
-        return [given_string]
-    else :
-        return [given_string[:where],given_string[where+len(clue):]]
 
 def superSplit(given_string):
     len_over = len(given_string) + 1
@@ -51,7 +46,7 @@ def superSplit(given_string):
     return all_meaning_list
 
 
-def addDecoding(setting): # setting은 올바른 입력이라는 것이 보장될 예정
+def decode_add(setting): # setting은 올바른 입력이라는 것이 보장될 예정
     splited = setting.split(" -")
     
     class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "tag":9} # 레벨도 있으면 좋긴 할텐데
