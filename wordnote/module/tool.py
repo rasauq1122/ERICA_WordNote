@@ -1,12 +1,22 @@
 import os
 
-module_dir = os.getcwd()
-main_dir = os.getcwd().split("/module")[0]
-note_dir = main_dir+"/note"
+def checkLast(main_string,clue):
+    clue_length = len(clue)
+    main_length = len(main_string)
+    return main_string[main_length-clue_length:] == clue
 
-now_note_name = ""
-word_count = -1
+now_dir = os.getcwd()
+directoies = ["/note","/module"]
+main_dir = ""
 
+for key in directoies:
+    if checkLast(now_dir,key) :
+        main_dir = now_dir.split(key)[0]
+if main_dir == "":
+    main_dir = now_dir
+
+note_dir = main_dir+directoies[0]
+module_dir = main_dir+directoies[1]
 
 def get_yes_or_no(notice):
     check = input(notice+" [y/n] ")
@@ -25,3 +35,27 @@ def normalSplit(given_string, clue):
         return [given_string]
     else :
         return [given_string[:where],given_string[where+len(clue):]]
+
+def setNNN(note_name,home_dir):
+    os.chdir(module_dir)
+    now_note_name = open("NowNoteName.txt","w",encoding="UTF-8")
+    now_note_name.write(note_name)
+    now_note_name.close()
+    os.chdir(home_dir)
+
+def getNNN(home_dir):
+    os.chdir(module_dir)
+    if os.path.isfile(module_dir+"/NowNoteName.txt") :
+        now_note_name = open("NowNoteName.txt","r",encoding="UTF-8")
+        note_name = now_note_name.readline()
+        os.chdir(home_dir) 
+        return note_name
+    else :
+        os.chdir(home_dir)
+        return "" 
+
+def resetNNN(home_dir):
+    os.chdir(module_dir)
+    if os.path.isfile(module_dir+"/NowNoteName.txt") :
+        os.remove(module_dir+"/NowNoteName.txt")
+    os.chdir(home_dir)
