@@ -1,4 +1,4 @@
-from module.tool import *
+from module.excute_word import *
 
 # n : 명사
 # v : 동사

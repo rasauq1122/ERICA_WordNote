@@ -1,4 +1,4 @@
-from module.note import *
+from module.decode_note import *
 
 def check_addnote(note_name):
     os.chdir(note_dir)
