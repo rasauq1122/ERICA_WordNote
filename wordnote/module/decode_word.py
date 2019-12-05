@@ -1,4 +1,4 @@
-from module.excute_word import *
+from module.execute_word import *
 
 # n : 명사
 # v : 동사
@@ -46,11 +46,11 @@ def superSplit(given_string):
     return all_meaning_list
 
 
-def decode_add(setting): # setting은 올바른 입력이라는 것이 보장될 예정
+def decode_addword(setting): # setting은 올바른 입력이라는 것이 보장될 예정
     splited = setting.split(" -")
     
     class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "tag":9} # 레벨도 있으면 좋긴 할텐데
-    part_of_class = [splited[0], [], [], [], [], [], [], [], []]
+    part_of_class = [splited[0].strip(), [], [], [], [], [], [], [], []]
     tags = [[], [], [], [], [], [], [], [], []]
     counts = [0, 0, 0, 0, 0, 0, 0, 0]
     splited.remove(splited[0])
