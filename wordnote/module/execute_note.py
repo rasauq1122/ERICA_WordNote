@@ -1,8 +1,5 @@
 from module.tool import *
 
-if not(os.path.isdir(note_dir)) : # 추후 부팅 과정으로 넘길 것
-    os.makedirs(note_dir)
-
 def addnote(note_name):
     os.chdir(note_dir)
     note = open(note_name+".txt","w",encoding="UTF-8")

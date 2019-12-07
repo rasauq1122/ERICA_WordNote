@@ -6,7 +6,7 @@ def checkLast(main_string,clue):
     return main_string[main_length-clue_length:] == clue
 
 now_dir = os.getcwd()
-directoies = ["/note","/module"]
+directoies = ["/data","/module","/data/note","/data/star"]
 main_dir = ""
 
 for key in directoies:
@@ -15,8 +15,10 @@ for key in directoies:
 if main_dir == "":
     main_dir = now_dir
 
-note_dir = main_dir+directoies[0]
+data_dir = main_dir+directoies[0]
 module_dir = main_dir+directoies[1]
+note_dir = main_dir+directoies[2]
+star_dir = main_dir+directoies[3]
 
 def get_yes_or_no(notice):
     check = input(notice+" [y/n] ")

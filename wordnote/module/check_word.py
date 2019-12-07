@@ -20,6 +20,9 @@ def check_addword(command):
             alltag = False
             if len(normalSplit(splited[i]," ")) == 2 and len(superSplit(normalSplit(splited[i]," ")[1])) != 0 :
                 meansomething = True
+        elif len(normalSplit(splited[i]," ")) == 2 and normalSplit(splited[i]," ")[1].find(";") != -1:
+            print("태그에 세미콜론을 포함할 수 없습니다.")
+            return
     if alltag :
         print("태그만 입력하실 수 없습니다.")
         return
