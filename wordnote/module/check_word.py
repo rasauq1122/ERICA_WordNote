@@ -1,6 +1,9 @@
 from module.decode_word import *
 
 def check_addword(command):
+    if getNNN(main_dir) == "":
+        print("접속 중인 단어장이 없습니다.")
+        return
     splited = command.split(" -")
     if splited[0] == "" :
         print("영단어가 감지되지 않았습니다.")

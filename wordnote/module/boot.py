@@ -7,6 +7,9 @@ def booting():
         os.makedirs(note_dir)
     if not os.path.isdir(star_dir) :
         os.makedirs(star_dir)
+    if not os.path.isdir(work_dir) :
+        os.makedirs(work_dir)
+
     if not os.path.isfile(star_dir+"/STAR.txt") :
         os.chdir(star_dir)
         star = open("STAR.txt","w",encoding="UTF-8")
