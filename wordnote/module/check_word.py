@@ -1,35 +1,45 @@
 from module.decode_word import *
 
 def check_addword(command):
-    if getNNN(main_dir) == "":
-        print("접속 중인 단어장이 없습니다.")
+    if getNNN(module_dir) == "" :
+        print("접속중인 단어장이 있어야 합니다.")
         return
     splited = command.split(" -")
     if splited[0] == "" :
         print("영단어가 감지되지 않았습니다.")
         return
-    splited.remove(splited[0])
     length = len(splited)
-    if length == 0:
-        print("태그가 아닌 하나의 옵션은 포함되어야 합니다.")
+    if length == 1 :
+        print("의미 옵션을 추가해주세요.")
         return
-    alltag = True
+
     meansomething = False
-    for i in range(length) :
-        if not splited[i].split(" ")[0] in {"n","v","a","ad","prep","conj","pron","int","tag"} :
-            print("다음은 올바르지 않은 옵션입니다 : "+splited[i].split(" ")[0])
+
+    for i in range(1,length) :
+        meaning_option = ["n","v","a","ad","prep","conj","pron","int"]
+        tag_option = ["tag"]
+        option_list = meaning_option + tag_option
+        option = splited[i]
+        option_main = normalSplit(option," ")[0]
+        option_sub = ""
+        if len(normalSplit(option," ")) == 2 :
+            option_sub = normalSplit(option," ")[1]
+        if not option_main in option_list :
+            print("다음은 올바르지 않은 옵션입니다 : "+option_main)
             return
-        elif not splited[i].split(" ")[0] in {"tag"} :
-            alltag = False
-            if len(normalSplit(splited[i]," ")) == 2 and len(superSplit(normalSplit(splited[i]," ")[1])) != 0 :
+        if option_main in tag_option :
+            if option_sub.find(";") != -1 :
+                print("태그에 세미콜론을 포함할 수 없습니다.")
+                return
+        else :
+            if option_sub != "" :
                 meansomething = True
-        elif len(normalSplit(splited[i]," ")) == 2 and normalSplit(splited[i]," ")[1].find(";") != -1:
-            print("태그에 세미콜론을 포함할 수 없습니다.")
-            return
-    if alltag :
-        print("태그만 입력하실 수 없습니다.")
-        return
+        option_detail = option_sub.split(" ")
+        for now_detail in option_detail :
+            if now_detail in option_list + ["MEANING"] :
+                print("의미나 태그로 예약어를 사용할 수 없습니다 : "+now_detail)
+                return
     if not meansomething :
-        print("단어는 최소 하나의 의미를 가져야 합니다.")
-        return
+        print("의미 옵션을 추가해주세요.")
+
     decode_addword(command)

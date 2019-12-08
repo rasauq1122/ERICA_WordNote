@@ -67,12 +67,11 @@ def decode_addword(setting): # setting은 올바른 입력이라는 것이 보�
                 now_tag.remove("")
             if now_tag != [] :
                 for i in range(log[1],log[2]+1) :
-                    tags[log[0]-1][log[i]] = [now_tag]
+                    tags[log[0]-1][i] = now_tag
         elif len(normalSplit(details," ")) == 2 :
             now_meaning = superSplit(normalSplit(details," ")[1])
             now_count = counts[now_class-1]
             part_of_class[now_class] = part_of_class[now_class] + now_meaning
             log = [now_class, now_count, now_count + len(now_meaning)-1]
             counts[now_class-1] = now_count + len(now_meaning)
-    print(part_of_class+[tags])
     addword(part_of_class + [tags])
