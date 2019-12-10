@@ -69,3 +69,17 @@ def doublesplit(given_string, para1, para2):
         splited = splited + now.split(para2)
         splited.remove(now)
     return splited
+
+def findAtStar(word) :
+    os.chdir(star_dir)
+    star = open("STAR.txt","r",encoding="UTF-8")
+    star_lines = star.readlines()
+    for now_line in star_lines :
+        if now_line.split("MEANING;")[0].split(";")[1] == word :
+            star.close()
+            return now_line.split("MEANING;")[0].split(";")[0]
+    star.close()
+    return -1
+
+def isAmbiguous(index, this_class, meaning_list) :
+    os.chdir()

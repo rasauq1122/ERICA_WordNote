@@ -1,6 +1,6 @@
 from module.decode_word import *
 
-def check_newword(command):
+def check_addword(command):
     if getNNN(module_dir) == "" :
         print("접속중인 단어장이 있어야 합니다.")
         return
@@ -12,7 +12,7 @@ def check_newword(command):
     if length == 1 :
         print("의미 옵션을 추가해주세요.")
         return
-
+    # 여기까지 위로 옮겨야 할 듯
     meansomething = False
     
     global meaning_option, tag_option
@@ -46,4 +46,4 @@ def check_newword(command):
     if not meansomething :
         print("의미 옵션을 추가해주세요.")
 
-    decode_newword(command)
+    decode_addword(command)
