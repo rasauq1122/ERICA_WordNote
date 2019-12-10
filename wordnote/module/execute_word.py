@@ -1,6 +1,6 @@
 from module.tool import *
 
-def addword(wordlist): # 기존에 없는 단어라면 여기로
+def newword(wordlist):
     os.chdir(star_dir)
     star = open("STAR.txt","r+",encoding="UTF-8")
     star_linelist = star.readlines()
@@ -9,7 +9,7 @@ def addword(wordlist): # 기존에 없는 단어라면 여기로
         count = count + 1
         star.readline()
     word = str(count)+";"+wordlist[0]+";"
-    class_list = ["n", "v", "a", "ad", "prep", "conj", "pron", "int"] # 예약어 처리할 것
+    class_list = ["n", "v", "a", "ad", "prep", "conj", "pron", "int"]
     for i in range(8) :
         group_length = len(wordlist[i+1])
         for j in range(group_length) :

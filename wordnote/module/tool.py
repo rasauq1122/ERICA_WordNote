@@ -62,3 +62,10 @@ def resetNNN(home_dir):
     if os.path.isfile(work_dir+"/NowNoteName.txt") :
         os.remove(work_dir+"/NowNoteName.txt")
     os.chdir(home_dir)
+
+def doublesplit(given_string, para1, para2):
+    splited = given_string.split(para1)
+    for now in splited:
+        splited = splited + now.split(para2)
+        splited.remove(now)
+    return splited
