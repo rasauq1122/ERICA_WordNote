@@ -1,9 +1,9 @@
 from module.decode_word import *
 
 def check_meaningoption(splited):
-    meansomething = False
     
-    global meaning_option, tag_option
+    meaning_list = []
+    meansomething = False
     meaning_option = ["n","v","a","ad","prep","conj","pron","int"]
     tag_option = ["tag"]
     length = len(splited)
@@ -32,6 +32,12 @@ def check_meaningoption(splited):
             if now_detail.strip() in reserved :
                 print("의미나 태그로 예약어를 사용할 수 없습니다 : "+now_detail)
                 return False
+            if option_main in meaning_option :
+                if now_detail.strip() in meaning_list :
+                    print("한 영단어가 같은 의미를 두 개이상 갖을 수 없습니다.")
+                    return False 
+                meaning_list = meaning_list + [now_detail.strip()]
+
     if not meansomething :
         print("의미 옵션을 추가해주세요.")
         return False  
@@ -60,6 +66,13 @@ def check_newword(command):
 
 def check_appendword(command):
     splited = command.split(" -")
+    if splited[0] == "" :
+        print("영단어가 감지되지 않았습니다.")
+        return
+    for number in ["0","1","2","3","4","5","6","7","8","9"] :
+        if splited[0].find(number) != -1 :
+            print("영단어에 숫자를 포함하실 수 없습니다.")
+            return
     if splited[0].isdecimal() :
         if not findAtStar_index(int(splited[0])) :
             print("해당 인덱스에 등록된 단어가 없습니다.")

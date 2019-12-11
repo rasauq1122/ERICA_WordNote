@@ -64,7 +64,7 @@ def decode_meaningoption(splited):
                 now_tag.remove("")
             if now_tag != [] :
                 for i in range(log[1],log[2]+1) :
-                    tags[log[0]-1][i] = now_tag
+                    tags[log[0]-1][i] = list(set(now_tag))
         elif len(normalSplit(details," ")) == 2 :
             now_meaning = superSplit(normalSplit(details," ")[1])
             now_count = counts[now_class-1]
