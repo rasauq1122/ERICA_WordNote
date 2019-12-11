@@ -7,8 +7,7 @@ def check_addnote(note_name):
     if note_name.find(".wordnote.txt") != -1 :
         print("예약어는 단어장의 이름으로 사용할 수 없습니다.")
         return
-    os.chdir(star_dir)
-    notelist = open("NOTELIST.txt","r",encoding="UTF-8")
+    notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
     notelist_reading = notelist.read()
     notelist.close()
     if notelist_reading.find(note_name+"\n") != -1 :
@@ -21,8 +20,7 @@ def check_addnote(note_name):
         addnote(note_name)
 
 def check_removenote(note_name):
-    os.chdir(star_dir)
-    notelist = open("NOTELIST.txt","r",encoding="UTF-8")
+    notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
     notelist_reading = notelist.read()
     notelist.close()
     if notelist_reading.find(note_name+"\n") != -1 and os.path.isfile(note_dir+"/"+note_name+".wordnote.txt") :
@@ -37,10 +35,9 @@ def check_noteform(note_name,note_line):
     return True 
 
 def check_connectnote(note_name):
-    os.chdir(note_dir)
-    if getNNN(note_dir) == "" :
+    if getNNN() == "" :
         if os.path.isfile(note_dir+"/"+note_name+".wordnote.txt") :
-            now_note = open(note_name+".wordnote.txt","r",encoding="UTF-8")
+            now_note = open("data/note/"+note_name+".wordnote.txt","r",encoding="UTF-8")
             note_line = now_note.readlines()
             now_note.close()
             if check_noteform(note_name,note_line) :
@@ -50,10 +47,10 @@ def check_connectnote(note_name):
         else :
             print("존재하지 않는 단어장에 접근할 수 없습니다.")
     else :
-        print("이미 접근 중인 단어장이 존재합니다. 단어장 이름 : "+getNNN(note_dir))
+        print("이미 접근 중인 단어장이 존재합니다. 단어장 이름 : "+getNNN())
 
 def check_disconnectnote():
-    if getNNN(module_dir) != "" :
+    if getNNN() != "" :
         disconnectnote()
     else :
         print("접근한 단어장이 없습니다.")

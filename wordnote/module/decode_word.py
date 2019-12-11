@@ -45,10 +45,7 @@ def superSplit(given_string):
         all_meaning_list = all_meaning_list + [now_meaning_list]
     return all_meaning_list
 
-
-def decode_newword(setting):
-    splited = setting.split(" -")
-    
+def decode_meaningoption(splited):
     class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "tag":9} # 레벨도 있으면 좋긴 할텐데
     part_of_class = [splited[0].strip(), [], [], [], [], [], [], [], []]
     tags = [{}, {}, {}, {}, {}, {}, {}, {}]
@@ -74,8 +71,18 @@ def decode_newword(setting):
             part_of_class[now_class] = part_of_class[now_class] + now_meaning
             log = [now_class, now_count, now_count + len(now_meaning)-1]
             counts[now_class-1] = now_count + len(now_meaning)
-    
-    if findAtStar(part_of_class[0]) == -1:
-        newword(part_of_class + [tags])
-    else :
         
+    return part_of_class + [tags]
+
+def decode_newword(setting):
+    splited = setting.split(" -")
+    newword(decode_meaningoption(splited))
+
+def decode_appendword(setting):
+    splited = setting.split(" -")
+    decoding = decode_meaningoption(splited)
+    if decoding[0].isdecimal() :
+        decoding[0] = int(decoding[0])
+    else :
+        decoding[0] = findAtStar(decoding[0])
+    appendword(decoding)
