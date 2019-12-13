@@ -92,3 +92,32 @@ def appendword(wordlist):
                     break
             print("단어장에 새로운 뜻을 등록했습니다.")
         working_note.close()
+
+def viewword(setting,star_mod):
+    nowword = setting.split(" -")[0]
+    star_index = findAtStar(nowword)
+    print(start_view)
+    if star_mod :
+        view_format("",[nowword+" (STAR : "+str(star_index)+")"])
+        print(middle_view)
+        view_list = makeview(getStarLine(star_index))
+        class_list = ["n", "v", "a", "ad", "prep", "conj", "pron", "int"]
+        for i in range(8) :
+            splited = view_list[i].split(";")
+            james = []
+            for now in splited :
+                james = james + kor_cut(now,149-len(class_list[i])-2)
+            view_format(class_list[i]+". ",james)
+    else :
+        note_index = findAtNote(star_index)
+        view_format("",[nowword+" (STAR : "+str(star_index)+", "+getNNN()+" : "+str(note_index)+")"])
+        print(middle_view)
+        view_list = makeview(mergeNoteLine(getNoteLine(note_index)))
+        class_list = ["n", "v", "a", "ad", "prep", "conj", "pron", "int"]
+        for i in range(8) :
+            splited = view_list[i].split(";")
+            james = []
+            for now in splited :
+                james = james + kor_cut(now,149-len(class_list[i])-2)
+            view_format(class_list[i]+". ",james)
+    print(end_view)

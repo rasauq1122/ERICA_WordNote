@@ -1,4 +1,5 @@
 import os
+import re
 
 def checkLast(main_string,clue):
     clue_length = len(clue)
@@ -20,6 +21,10 @@ module_dir = main_dir+directoies[1]
 note_dir = main_dir+directoies[2]
 star_dir = main_dir+directoies[3]
 work_dir = main_dir+directoies[4]
+
+start_view = "┌"+"─"*149+"┐"
+middle_view = "├"+"─"*149+"┤"
+end_view = "└"+"─"*149+"┘"
 
 def get_yes_or_no(notice):
     check = input(notice+" [y/n] ")
@@ -85,3 +90,127 @@ def glue(str_list,insert):
     for i in range(1,length) :
         string = string + insert + str_list[i]
     return string    
+
+def len_kor(string):
+    kor_char = re.compile("[ㄱ-ㅎ가-힣ㅏ-ㅣ]")
+    length = 0
+    for char in string:
+        if kor_char.match(char) :
+            length = length + 2
+        else :
+            length = length + 1
+    return length
+
+def count_kor(string,limit):
+    kor_char = re.compile("[ㄱ-ㅎ가-힣ㅏ-ㅣ]")
+    length = len(string)
+    count = 0
+    for index in range(length) :
+        now = 0
+        if kor_char.match(string[index]) :
+            now = 2
+        else :
+            now = 1
+        if count + now > limit :
+            return index
+        else :
+            count = count + now
+    return length - 1
+
+def kor_cut(string,length):
+    if length < 2:
+        return []
+    if len_kor(string) == 0:
+        return []
+    elif len_kor(string) <= length:
+        return [string]
+    else :
+        return [string[:count_kor(string,length)]] + kor_cut(string[count_kor(string,length):],length)
+
+def view_format(pre,str_list):
+    good_len = 149-len_kor(pre)
+    def invis(string, mod):
+        if mod == 0 :
+            return string
+        else :
+            return " "*len_kor(string)
+    
+    length = len(str_list)
+    for i in range(length) :
+        print("|"+invis(pre,i)+str_list[i]+" "*(good_len-len_kor(str_list[i]))+"|")
+
+def getStarLine(index):
+    star = open("data/star/STAR.txt","r",encoding="UTF-8")
+    star_lines = star.readlines()
+    star.close()
+    if len(star_lines) > index :
+        return star_lines[index]
+    else :
+        return ""
+
+def makeview(string): # STAR 형식만 받음
+    class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8} 
+    splited = string.split("MEANING;")
+    length = len(splited)
+    view = ["","","","","","","",""]
+    
+    for i in range(1,length) :
+        parts = splited[i].split("tag;")
+        meaning_part = parts[0]
+        meaning_split = meaning_part.split(";")
+        now_class = class_dictionary[meaning_split[0]]-1
+        view[now_class] = view[now_class] + "(" + str(i-1) + ") " + meaning_split[1]
+        
+        length2 = len(meaning_split)
+        for j in range(2,length2-1) :
+            view[now_class] = view[now_class] + ", " + meaning_split[j]
+        
+        if len(parts) == 2 :
+            tag_split = parts[1].split(";")
+            view[now_class] = view[now_class] + " # tag : " + tag_split[0]
+            
+            length2 = len(tag_split)
+            for j in range(1,length2-1) :
+                view[now_class] = view[now_class] + ", " + tag_split[j]
+        view[now_class] = view[now_class] + ";"
+
+    return view
+
+def findAtNote(index):
+    if getNNN() != "" :
+        working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
+        working_lines = working_note.readlines()
+        working_note.close()
+        
+        length = len(working_lines)
+        for i in range(length) :
+            if working_lines[i].find("WordAt"+str(index)) != -1:
+                return i
+    return -1
+
+def getNoteLine(index):
+    if getNNN() != "" :
+        working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
+        working_lines = working_note.readlines()
+        working_note.close()
+        length = len(working_lines)
+        
+        if index < length :
+            return working_lines[index]
+    return ""
+
+def mergeNoteLine(string): # note 형식만 받음
+    if string == "":
+        return ""
+    note_splited = string.split(";WordAt")
+    james = note_splited[1].split(";")
+    star_line = getStarLine(int(james[0]))
+    length = len(james)
+
+    star_splited = star_line.split("MEANING;")
+    now_line = star_splited[0] 
+    
+    for i in range(1,length-1) : # 예외처리 필요
+        now_line = now_line + "MEANING;" + star_splited[int(james[i])+1]
+
+    return now_line
