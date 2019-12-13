@@ -137,7 +137,7 @@ def view_format(pre,str_list):
     
     length = len(str_list)
     for i in range(length) :
-        print("|"+invis(pre,i)+str_list[i]+" "*(good_len-len_kor(str_list[i]))+"|")
+        print("│"+invis(pre,i)+str_list[i]+" "*(good_len-len_kor(str_list[i]))+"│")
 
 def getStarLine(index):
     star = open("data/star/STAR.txt","r",encoding="UTF-8")
