@@ -87,10 +87,10 @@ def findAtStar_index(index):
 def glue(str_list,insert):
     if len(str_list) == 0:
         return ""
-    string = str_list[0]
+    string = str(str_list[0])
     length = len(str_list)
     for i in range(1,length) :
-        string = string + insert + str_list[i]
+        string = string + insert + str(str_list[i])
     return string    
 
 def len_kor(string):
@@ -232,7 +232,6 @@ def isNoteHaving(note_name,star_index):
         note_lines = note.read().split("\n")
         for now in note_lines :
             if now.find("WordAt"+str(star_index)) != -1 :
-                print(now)
                 havings = normalSplit(now,"WordAt")[1].split(";")[1:]
                 havings.remove("")
                 break
