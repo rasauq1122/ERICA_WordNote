@@ -85,6 +85,8 @@ def findAtStar_index(index):
     return index < len(star_lines) and star_lines[index] != ""
 
 def glue(str_list,insert):
+    if len(str_list) == 0:
+        return ""
     string = str_list[0]
     length = len(str_list)
     for i in range(1,length) :
@@ -159,7 +161,7 @@ def makeview(string): # STAR 형식만 받음
         meaning_part = parts[0]
         meaning_split = meaning_part.split(";")
         now_class = class_dictionary[meaning_split[0]]-1
-        if now_class == 9 :
+        if now_class == 8 :
             continue
         view[now_class] = view[now_class] + "(" + str(i-1) + ") " + meaning_split[1]
         
@@ -216,3 +218,33 @@ def mergeNoteLine(string): # note 형식만 받음
         now_line = now_line + "MEANING;" + star_splited[int(james[i])+1]
 
     return now_line
+
+def getNoteList():
+    notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
+    splited = notelist.read().split("\n")
+    notelist.close()
+    return splited
+
+def isNoteHaving(note_name,star_index):
+    havings = []
+    if os.path.isfile(note_dir+"/"+note_name+".wordnote.txt") :
+        note = open("data/note/"+note_name+".wordnote.txt","r",encoding="UTF-8")
+        note_lines = note.read().split("\n")
+        for now in note_lines :
+            if now.find("WordAt"+str(star_index)) != -1 :
+                print(now)
+                havings = normalSplit(now,"WordAt")[1].split(";")[1:]
+                havings.remove("")
+                break
+    return havings
+
+def sortbynumber(can_int_str_list) :
+    length = len(can_int_str_list)
+    for i in range(length) :
+        if not can_int_str_list[i].isdecimal() :
+            return []
+        can_int_str_list[i] = int(can_int_str_list[i])
+    can_int_str_list.sort()
+    for i in range(length) :
+        can_int_str_list[i] = str(can_int_str_list[i])
+    return can_int_str_list

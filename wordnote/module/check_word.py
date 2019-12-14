@@ -118,7 +118,7 @@ def check_viewword(setting):
                 star_mod = True
         if getNNN() != "" :
             working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
-            if working_note.read().find("WordAt"+str(index_star)) == -1 :
+            if working_note.read().find("WordAt"+str(index_star)) == -1 and not star_mod :
                 working_note.close()
                 print("현재 단어장("+getNNN()+")에서 찾을 수 없는 단어입니다 : "+splited[0].strip())
                 return
@@ -267,3 +267,99 @@ def check_eraseword(setting):
         setting = splited[0] + " -opt " + sub_command
     
     decode_eraseword(setting)
+
+def check_candelete(str_list,max_meaning,star_index,word):
+    for now_detail in str_list :
+        if not now_detail.strip().isdecimal() :
+            print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
+            return False
+        if int(now_detail.strip()) >= max_meaning :
+            print("영단어 "+word+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
+            return False
+    return True
+
+def check_deleteword(setting):
+    splited = setting.split(" -")
+    if getNNN() != "" :
+        print("접속 중인 단어장이 있으면 사용할 수 없는 명령어입니다.")
+        return
+    if not check_word(splited[0]) :
+        return
+    star_index = findAtStar(splited[0])
+    if star_index == -1 :
+        print("STAR에 등록되지 않는 단어는 삭제할 수 없습니다.")
+        return
+    mod = 0
+
+    mod_option = ["all","opt"]
+    length = len(splited)
+    max_meaning = len(getStarLine(star_index).split("MEANING;"))
+    for i in range(1,length) :
+        now = splited[i].split(" ")[0].strip()
+        if not now in mod_option :
+            print("알 수 없는 옵션입니다 : "+splited[i].split(" ")[0].strip())
+            return
+        if mod != 0 :
+            print("이 명령어에서 모드 옵션은 동시에 하나만 적용할 수 있습니다.")
+            return
+        if now == "all" :
+            if len(splited[i].split(" ")) > 1:
+                print("all 옵션은 인수를 갖지 않습니다.")
+                return
+            mod = 1
+        if now == "opt" :
+            if len(splited[i].split(" ")) == 1:
+                    print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                    return
+            detail_list = normalSplit(splited[i]," ")[1].split(",")
+            if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
+                return
+            mod = 2
+    
+    if mod == 0 :
+        viewword(splited[0],[True])
+        sub_command = input("STAR에서 지우고자 하는 단어의 뜻 번호를 입력해주세요 : ")
+        detail_list = sub_command.split(",")
+        if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
+            return
+        setting = setting + " -opt " + sub_command
+    elif mod == 1 :
+        sub_command = ""
+        meaninglist = getStarLine(star_index).split("MEANING;")
+        length2 = len(meaninglist)
+        for i in range(1,length2) :
+            if meaninglist[i] != "NULL" :
+                sub_command = sub_command + str(i-1) + ", "
+        setting = splited[0] + " -opt " + sub_command
+
+    notelist = getNoteList()
+    
+    options = setting.split("-opt")[1].split(",")
+    log = []
+    for now in options :
+        if not now.strip() in log and now.strip() != "":
+            log = log + [int(now.strip())]
+    log.sort()
+    affected = {}
+    for now in notelist :
+        havings = isNoteHaving(now,star_index)
+        for now_log in log :
+            if str(now_log) in havings :
+                if not now in affected.keys() :
+                    affected[now] = [str(now_log)]
+                else :
+                    affected[now] = affected[now] + [str(now_log)]
+
+    if mod != 0 :
+        viewword(splited[0],[True])
+
+    affected_note = list(affected.keys())
+    if affected_note != [] :
+        print("다음 단어장들이 참조하고 있는 단어의 뜻도 함께 삭제됩니다 :")
+    for now in affected_note :
+        print(" "+now+" : "+glue(affected[now],", "))
+
+    if not get_yes_or_no("정말 삭제하시겠습니까?") :
+        return
+
+    deleteword(star_index,log,affected)

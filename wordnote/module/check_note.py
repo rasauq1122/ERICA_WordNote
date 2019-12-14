@@ -53,6 +53,9 @@ def check_connectnote(note_name):
         print("이미 접근 중인 단어장이 존재합니다. 단어장 이름 : "+getNNN())
 
 def check_disconnectnote(string):
+    if string != "":
+        print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")
+        return
     if getNNN() != "" :
         disconnectnote()
     else :
@@ -60,7 +63,8 @@ def check_disconnectnote(string):
 
 def check_end(setting):
     if setting == "" :
-        check_disconnectnote(setting)
+        check_disconnectnote("")
         end()
     else :
         print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")
+        return
