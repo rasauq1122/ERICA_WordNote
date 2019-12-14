@@ -48,3 +48,8 @@ def disconnectnote():
     os.remove(work_dir+"/"+getNNN()+".working-on.txt")
     print("접근한 단어장에서 벗어납니다. 단어장 이름 : "+getNNN())
     resetNNN()
+
+def end():
+    import sys
+    print("프로그램을 종료합니다.")
+    sys.exit()

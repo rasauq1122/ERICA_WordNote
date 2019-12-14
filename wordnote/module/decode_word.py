@@ -86,3 +86,33 @@ def decode_appendword(setting):
     else :
         decoding[0] = findAtStar(decoding[0])
     appendword(decoding)
+
+def decode_viewword(setting):
+    star_mod = False
+    splited = setting.split(" -")
+    for now in setting :
+        if now.strip() == "star" :
+            star_mod = True
+    viewword(setting.split(" -")[0],[star_mod])
+
+def decode_pullword(setting):
+    word = setting.split(" -opt")[0].strip()
+    options = setting.split(" -opt")[1].split(",")
+    star_index = findAtStar(word)
+    working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
+    working_lines = working_note.readlines()
+    working_note.close()
+    length = len(working_lines)
+    
+    cnt = 0
+    for i in range(length) :
+        if working_lines[i].find("WorkAt"+str(star_index)) != -1 :
+            cnt = i
+    if cnt == 0 :
+        cnt = length
+
+    length = len(options)
+    for i in range(length) :
+        options[i] = options[i].strip()
+    
+    pullword(cnt,star_index,list(set(options)))

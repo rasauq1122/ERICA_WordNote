@@ -54,3 +54,10 @@ def check_disconnectnote():
         disconnectnote()
     else :
         print("접근한 단어장이 없습니다.")
+
+def check_end(setting):
+    if setting == "" :
+        check_disconnectnote()
+        end()
+    else :
+        print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")

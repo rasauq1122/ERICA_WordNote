@@ -149,7 +149,7 @@ def getStarLine(index):
         return ""
 
 def makeview(string): # STAR 형식만 받음
-    class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8} 
+    class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "NULL" : 9} 
     splited = string.split("MEANING;")
     length = len(splited)
     view = ["","","","","","","",""]
@@ -159,6 +159,8 @@ def makeview(string): # STAR 형식만 받음
         meaning_part = parts[0]
         meaning_split = meaning_part.split(";")
         now_class = class_dictionary[meaning_split[0]]-1
+        if now_class == 9 :
+            continue
         view[now_class] = view[now_class] + "(" + str(i-1) + ") " + meaning_split[1]
         
         length2 = len(meaning_split)

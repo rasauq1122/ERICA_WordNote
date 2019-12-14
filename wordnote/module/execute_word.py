@@ -93,11 +93,11 @@ def appendword(wordlist):
             print("단어장에 새로운 뜻을 등록했습니다.")
         working_note.close()
 
-def viewword(setting,star_mod):
-    nowword = setting.split(" -")[0]
+def viewword(word,modlist):
+    nowword = word
     star_index = findAtStar(nowword)
     print(start_view)
-    if star_mod :
+    if modlist[0] :
         view_format("",[nowword+" (STAR : "+str(star_index)+")"])
         print(middle_view)
         view_list = makeview(getStarLine(star_index))
@@ -121,3 +121,25 @@ def viewword(setting,star_mod):
                 james = james + kor_cut(now,149-len(class_list[i])-2)
             view_format(class_list[i]+". ",james)
     print(end_view)
+
+def pullword(index,star_index,pointers):
+    working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
+    working_lines = working_note.readlines()
+    working_note.close()
+    if index == len(working_lines) :
+        working_lines.append(str(index)+";WordAt"+str(star_index)+";")
+    james = normalSplit(working_lines[index],";WordAt")[1].split(";")[1:]
+    
+    for now in james :
+        if now.strip() != "":
+            pointers.append(now.strip())
+    pointers = list(set(pointers))
+    
+    working_lines[index] = str(index)+";WordAt"+str(star_index)+";"
+    for now in pointers :
+        working_lines[index] = working_lines[index] + now + ";"
+    working_lines[index] = working_lines[index] + "\n"
+    working_note = open("data/work/"+getNNN()+".working-on.txt","w",encoding="UTF-8")
+    working_note.writelines(working_lines)
+    working_note.close()
+    print("성공적으로 단어의 뜻을 불러왔습니다.")
