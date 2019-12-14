@@ -36,7 +36,7 @@ def newword(wordlist):
     star.write(glue(star_linelist,"\n")+"\n")
     star.close()
     print("새로운 단어를 등록했습니다 : "+wordlist[0])
-    index_list = list(range(len(star_linelist[count].split("MEANING;"))))
+    index_list = list(range(len(star_linelist[count].split("MEANING;"))-1))
 
     if getNNN() != "" and get_yes_or_no("현재 단어장 ("+getNNN()+") 에 단어를 추가합니까?") :
         working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
