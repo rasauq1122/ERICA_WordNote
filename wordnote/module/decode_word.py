@@ -90,7 +90,7 @@ def decode_appendword(setting):
 def decode_viewword(setting):
     star_mod = False
     splited = setting.split(" -")
-    for now in setting :
+    for now in splited :
         if now.strip() == "star" :
             star_mod = True
     viewword(setting.split(" -")[0],[star_mod])
@@ -103,16 +103,41 @@ def decode_pullword(setting):
     working_lines = working_note.readlines()
     working_note.close()
     length = len(working_lines)
+    log = []
     
-    cnt = 0
+    cnt = -1
     for i in range(length) :
-        if working_lines[i].find("WorkAt"+str(star_index)) != -1 :
+        if working_lines[i].find("WordAt"+str(star_index)) != -1 :
             cnt = i
-    if cnt == 0 :
+            break
+    if cnt == -1 :
         cnt = length
 
     length = len(options)
     for i in range(length) :
         options[i] = options[i].strip()
     
-    pullword(cnt,star_index,list(set(options)))
+    while "" in options:
+        options.remove("")
+
+    length = len(options)
+    for i in range(length) :
+        if not options[i] in log :
+            log = log + [options[i]]
+    
+    pullword(cnt,star_index,log)
+
+def decode_eraseword(setting):
+    word = setting.split(" -opt")[0].strip()
+    options = setting.split(" -opt")[1].split(",")
+    star_index = findAtStar(word)
+    note_index = findAtNote(star_index)
+    james = normalSplit(getNoteLine(note_index),";WordAt")[1].split(";")[1:]
+    length = len(options)
+    for i in range(length) :
+        options[i] = options[i].strip()
+    log = []
+    for now in james :
+        if not (now in options or now == "\n"):
+            log = log + [now]
+    return eraseword(note_index,star_index,log)

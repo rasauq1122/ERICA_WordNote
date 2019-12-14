@@ -23,6 +23,9 @@ def check_removenote(note_name):
     notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
     notelist_reading = notelist.read()
     notelist.close()
+    if getNNN() != "":
+        print("접속 중인 단어장이 있으면 사용할 수 없는 명령어입니다.")
+        return
     if notelist_reading.find(note_name+"\n") != -1 and os.path.isfile(note_dir+"/"+note_name+".wordnote.txt") :
         if get_yes_or_no("정말 단어장을 삭제할까요?") :
             removenote(note_name)
@@ -49,7 +52,7 @@ def check_connectnote(note_name):
     else :
         print("이미 접근 중인 단어장이 존재합니다. 단어장 이름 : "+getNNN())
 
-def check_disconnectnote():
+def check_disconnectnote(string):
     if getNNN() != "" :
         disconnectnote()
     else :
@@ -57,7 +60,7 @@ def check_disconnectnote():
 
 def check_end(setting):
     if setting == "" :
-        check_disconnectnote()
+        check_disconnectnote(setting)
         end()
     else :
         print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")

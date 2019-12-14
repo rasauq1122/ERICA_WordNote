@@ -110,7 +110,7 @@ def viewword(word,modlist):
             view_format(class_list[i]+". ",james)
     else :
         note_index = findAtNote(star_index)
-        view_format("",[nowword+" (STAR : "+str(star_index)+", "+getNNN()+" : "+str(note_index)+")"])
+        view_format("",[nowword+" ("+getNNN()+" : "+str(note_index)+", "+"STAR : "+str(star_index)+")"])
         print(middle_view)
         view_list = makeview(mergeNoteLine(getNoteLine(note_index)))
         class_list = ["n", "v", "a", "ad", "prep", "conj", "pron", "int"]
@@ -131,9 +131,8 @@ def pullword(index,star_index,pointers):
     james = normalSplit(working_lines[index],";WordAt")[1].split(";")[1:]
     
     for now in james :
-        if now.strip() != "":
-            pointers.append(now.strip())
-    pointers = list(set(pointers))
+        if now.strip() != "" and not now.strip() in pointers:
+            pointers = pointers + [now.stirp()]
     
     working_lines[index] = str(index)+";WordAt"+str(star_index)+";"
     for now in pointers :
@@ -143,3 +142,20 @@ def pullword(index,star_index,pointers):
     working_note.writelines(working_lines)
     working_note.close()
     print("성공적으로 단어의 뜻을 불러왔습니다.")
+
+def eraseword(index,star_index,pointers):
+    working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
+    working_lines = working_note.readlines()
+    working_note.close()
+    if pointers == [] :
+        working_lines[index] = ""
+        print("해당 영단어가 접속중인 단어장에서 완전히 지워집니다.")
+    else :
+        working_lines[index] = str(index) +";WordAt" + str(star_index) + ";"
+        for now in pointers :
+            working_lines[index] = working_lines[index] + now + ";"
+    working_lines[index] = working_lines[index] + "\n"
+    working_note = open("data/work/"+getNNN()+".working-on.txt","w",encoding="UTF-8")
+    working_note.writelines(working_lines)
+    working_note.close()
+    print("성공적으로 단어의 뜻을 삭제하였습니다.")

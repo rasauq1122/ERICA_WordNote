@@ -2,7 +2,7 @@ from module.decode_word import *
 
 global abc_rex, kor_rex
 abc_rex = re.compile("[a-zA-Z` -]*")
-kor_rex = re.compile("[ㄱ-ㅎ가-힣()ㅏ-ㅣ ]*")
+kor_rex = re.compile("[ㄱ-ㅎ가-힣()ㅏ-ㅣ 0-9]*")
 
 def check_meaningoption(splited):
     
@@ -33,7 +33,7 @@ def check_meaningoption(splited):
         for now_detail in option_detail :
             if option_main in meaning_option :
                 if kor_rex.match(now_detail.strip()).group() != now_detail.strip() :
-                    print("단어는 다음과 같은 정규표현식을 지켜야 합니다 : [ㄱ-ㅎ가-힣() ]*")
+                    print("단어는 다음과 같은 정규표현식을 지켜야 합니다 : [ㄱ-ㅎ가-힣()ㅏ-ㅣ 0-9]**")
                     return False
                 if now_detail.strip() in meaning_list :
                     print("한 영단어가 같은 의미를 두 개이상 갖을 수 없습니다.")
@@ -128,19 +128,32 @@ def check_viewword(setting):
             return
         decode_viewword(setting)
 
-def check_pullword(setting): # STAR에 없는 뜻 번호에 대한 예외처리 필요 (0,2,3) 이런식으로 있을 때
+def check_canpull(str_list,max_meaning,star_index,word):
+    for now_detail in str_list :
+        if not now_detail.strip().isdecimal() :
+            print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
+            return False
+        if int(now_detail.strip()) >= max_meaning :
+            print("영단어 "+word+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
+            return False
+        if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL" :
+            print("영단어 "+word+"의 "+now_detail.strip()+"번째 뜻은 null 값으로 지정할 수 없습니다.")
+            return False
+    return True
+
+def check_pullword(setting): 
     splited = setting.split(" -")
     
     mod = 0
+    if getNNN() == "":
+        print("접속중인 단어장이 없습니다.")
+        return
     if not check_word(splited[0]) :
         return
     star_index = findAtStar(splited[0])
     if star_index == -1 :
         print("등록되지 않는 영단어입니다 : "+splited[0])
         print("해당 영단어를 등록하고 싶다면 newword 명령어를 사용하세요.")
-        return
-    if getNNN() == "":
-        print("접속중인 단어장이 없습니다.")
         return
     
     mod_option = ["all","opt"]
@@ -164,33 +177,16 @@ def check_pullword(setting): # STAR에 없는 뜻 번호에 대한 예외처리 
                     print("opt 옵션은 정수를 인수로 갖어야 합니다.")
                     return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
-            for now_detail in detail_list :
-                if not now_detail.strip().isdecimal() :
-                    print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
-                    return
-                if int(now_detail.strip()) >= max_meaning :
-                    print("영단어 "+splited[0]+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
-                    return
-                if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL" :
-                    print("영단어 "+splited[0]+"의 "+now_detail.strip()+"번째 뜻은 null 값으로 지정할 수 없습니다.")
-                    return
-                mod = 2
+            if not check_canpull(detail_list,max_meaning,star_index,splited[0]) :
+                return
+            mod = 2
     
     if mod == 0 :
         viewword(splited[0],[True])
-        sub_command = input("STAR에서 가져오고자 하는 단어의 뜻을 입력해주세요 : ")
+        sub_command = input("STAR에서 가져오고자 하는 단어의 뜻 번호를 입력해주세요 : ")
         detail_list = sub_command.split(",")
-        for now_detail in detail_list :
-            if not now_detail.strip().isdecimal() :
-                print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
-                return
-            if int(now_detail.strip()) >= max_meaning :
-                print("영단어 "+splited[0]+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
-                return
-            if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL" :
-                print("영단어 "+splited[0]+"의 "+now_detail.strip()+"번째 뜻은 null 값으로 지정할 수 없습니다.")
-                return
-        mod = 2
+        if not check_canpull(detail_list,max_meaning,star_index,splited[0]) :
+            return
         setting = setting + " -opt " + sub_command
     elif mod == 1 :
         sub_command = ""
@@ -199,6 +195,75 @@ def check_pullword(setting): # STAR에 없는 뜻 번호에 대한 예외처리 
         for i in range(1,length2) :
             if meaninglist[i] != "NULL" :
                 sub_command = sub_command + str(i-1) + ", "
-        setting = setting + " -opt " + sub_command
+        setting = splited[0] + " -opt " + sub_command
 
     decode_pullword(setting)
+
+def check_canerase(str_list, james):
+    for now_detail in str_list :
+        if not now_detail.strip().isdecimal() :
+            print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
+            return False
+        if not now_detail.strip() in james :
+            print("접속중인 단어장에 참조되지 않은 단어의 뜻은 지울 수 없습니다.")
+            return False
+    return True
+
+def check_eraseword(setting):
+    splited = setting.split(" -")
+    
+    mod = 0
+    if getNNN() == "":
+        print("접속중인 단어장이 없습니다.")
+        return
+    if not check_word(splited[0]) :
+        return
+    star_index = findAtStar(splited[0])
+    if star_index == -1 :
+        print("등록되지 않는 영단어입니다 : "+splited[0])
+        print("해당 영단어를 등록하고 싶다면 newword 명령어를 사용하세요.")
+        return
+    note_index = findAtNote(star_index)
+    if note_index == -1 :
+        print("접속중인 단어장에 없는 영단어입니다.")
+        return
+    james = normalSplit(getNoteLine(note_index),";WordAt")[1].split(";")[1:]
+
+    mod_option = ["all","opt"]
+    length = len(splited)
+    for i in range(1,length) :
+        now = splited[i].split(" ")[0].strip()
+        if not now in mod_option :
+            print("알 수 없는 옵션입니다 : "+splited[i].split(" ")[0].strip())
+            return
+        if mod != 0 :
+            print("이 명령어에서 모드 옵션은 동시에 하나만 적용할 수 있습니다.")
+            return
+        if now == "all" :
+            if len(splited[i].split(" ")) > 1:
+                print("all 옵션은 인수를 갖지 않습니다.")
+                return
+            mod = 1
+        if now == "opt" :
+            if len(splited[i].split(" ")) == 1:
+                    print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                    return
+            detail_list = normalSplit(splited[i]," ")[1].split(",")
+            if not check_canerase(detail_list,james) :
+                return
+            mod = 2
+
+    if mod == 0 :
+        viewword(splited[0],[False])
+        sub_command = input("지우고자 하는 단어의 뜻 번호를 입력해주세요 : ")
+        detail_list = sub_command.split(",")
+        if not check_canerase(detail_list,james) :
+            return
+        setting = setting + " -opt " + sub_command
+    elif mod == 1 :
+        sub_command = ""
+        for now in james :
+            sub_command = sub_command + now + ", "
+        setting = splited[0] + " -opt " + sub_command
+    
+    decode_eraseword(setting)
