@@ -11,7 +11,7 @@ def giveword(wordlist):
             for k in range(word_count) :
                 word = word + wordlist[i+1][j][k]
                 if k < word_count-1 :
-                    word = word + ","
+                    word = word + ";"
             word = word + ";"
             if j in wordlist[9][i].keys() :
                 word = word + "tag" + ";"
@@ -20,7 +20,7 @@ def giveword(wordlist):
                 for k in range(tag_count) :
                     word = word + tag[k]
                     if k < tag_count-1 :
-                        word = word + ","
+                        word = word + ";"
                 word = word + ";"
     return word
 
@@ -56,6 +56,7 @@ def appendword(wordlist):
     meanings = star.read().split("\n")
     star.close()
     splited = meanings[wordlist[0]].split("MEANING;")
+    print(giveword(wordlist))
     james = giveword(wordlist).split("MEANING;")
     wordname = meanings[wordlist[0]].split("MEANING;")[0].split(";")[1]
     while "" in james :
@@ -73,7 +74,7 @@ def appendword(wordlist):
     meanings[wordlist[0]] = glue(splited,"MEANING;")
     if james != [] :
         meanings[wordlist[0]] = meanings[wordlist[0]] + "MEANING;" + glue(james,"MEANING;")
-        index_list = index_list + list(range(length1,length1+len(james)))
+        index_list = index_list + list(range(length1-1,length1+len(james)-1))
 
     star = open("data/star/STAR.txt","w",encoding="UTF-8")
     star.write(glue(meanings,"\n"))
@@ -94,9 +95,9 @@ def appendword(wordlist):
             working_note_lines = working_note.read().split("\n")
             working_note.close()
             index = findAtNote(wordlist[0])
-            working_note_lines[index] = working_note_lines[index] + ";" + glue(index_list,";") + ";" 
+            working_note_lines[index] = working_note_lines[index] + glue(index_list,";") + ";" 
         working_note = open("data/work/"+getNNN()+".working-on.txt","w",encoding="UTF-8")
-        working_note.write(glue(working_note_lines,"\n")+"\n")
+        working_note.write(glue(working_note_lines,"\n"))
         working_note.close()    
         print("단어장에 새로운 뜻을 등록했습니다.")        
 
@@ -226,3 +227,63 @@ def deleteword(star_index,star_pointers,pointers_dictionary):
         minidelete(star_index,now,pointers_dictionary[now])
     
     print("성공적으로 단어를 삭제했습니다.")
+
+def decode_modifyword(next_command, star_index, modi_index, overlay):
+    now_line = getStarLine(star_index).split("MEANING;")[1:][modi_index]
+    log = []
+    mod = 0
+    if overlay > -1 :
+        mod = 1
+    elif overlay < -1 :
+        mod = 2
+
+    splited = next_command.split(",")
+    for now in splited :
+        log.append(now.strip())
+
+    if mod == 0 :
+        return now_line.split("tag;")[0].split(";")[0] + ";" + glue(log,";")+";"
+    elif mod == 1 :
+        return now_line.split("tag;")[0]+glue(log,";")+";"
+    
+    now_line = now_line.split(";tag")[0].split(";")
+    print(now_line)
+    for now in log :
+        now_line.remove(now)
+    print(now_line)
+    if len(now_line) <= 2 :
+        return "NULL;"
+
+    return glue(now_line,";")+";"
+
+def modifyword(next_command, star_index, modi_index, overlay):
+    star = open("data/star/STAR.txt","r",encoding="UTF-8")
+    star_lines = star.read().split("\n")
+    star.close()
+    meanings = star_lines[star_index].split("MEANING;")
+    now_meaning = meanings[modi_index+1].split(";tag")
+    now_meaning[0] = decode_modifyword(next_command,star_index,modi_index,overlay)
+
+    if now_meaning[0] == "NULL;":
+        now_meaning = ["NULL;"]
+    meanings[modi_index+1] = glue(now_meaning,";tag")
+    star_lines[star_index] = glue(meanings,"MEANING;")
+
+    star = open("data/star/STAR.txt","r",encoding="UTF-8")
+    star_check = star.read().split("\n")
+    star.close()
+    checker = star_check[star_index].split("MEANING")[1:]
+    allnull = True
+    for now in checker :
+        if checker != "NULL" :
+            allnull = False
+            break
+    
+    if allnull :
+        star_lines = []
+        print("남아 있는 단어의 뜻이 없으므로 해당 영단어가 삭제됩니다.")
+    star = open("data/star/STAR.txt","w",encoding="UTF-8") 
+    star.write(glue(star_lines,"\n"))
+    star.close()
+
+    print("성공적으로 단어의 뜻을 수정했습니다.")
