@@ -287,3 +287,20 @@ def modifyword(next_command, star_index, modi_index, overlay):
     star.close()
 
     print("성공적으로 단어의 뜻을 수정했습니다.")
+
+def checkword(setting):
+    notelist = getNoteList()
+    star_index = findAtStar(setting)
+    boot = False
+    for now in notelist :
+        if isNoteHaving(now,star_index) != [] :
+            if boot :
+                print(", ",end="")
+            else :
+                print("참조하고 있는 단어장 목록 : ",end="")
+            print(now,end="")
+            boot = True
+    if not boot :
+        print("참조하고 있는 단어장이 없습니다.")
+    else :
+        print("")

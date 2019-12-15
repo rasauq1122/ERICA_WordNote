@@ -498,3 +498,17 @@ def check_modifyword(setting):
                 return
 
     modifyword(next_command, star_index, modi_index,overlay)
+
+def check_checkword(setting):
+    if setting.find("-") != -1 :
+        print("옵션을 넣을 수 없는 명령어입니다.")
+        return
+    if getNNN() != "" :
+        print("접속 중인 단어장이 있으면 사용할 수 없는 명령어입니다.")
+        return
+    if not check_word(setting) :
+        return
+    if findAtStar(setting) == -1 :
+        print("등록되지 않은 영단어입니다.")
+        return
+    checkword(setting)
