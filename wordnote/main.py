@@ -1,6 +1,10 @@
 from module.module import *
 
 booting()
+breaker()
+log = open("data/log.txt","a",encoding="UTF-8")
+log.write(str(datetime.datetime.now())+" : "+"boot\n")
+log.close()
 
 commands = {"addnote":check_addnote,"removenote":check_removenote,"connectnote":check_connectnote,
             "disconnectnote":check_disconnectnote,"mergenote":check_mergenote,"notelist":check_notelist,
@@ -13,10 +17,13 @@ commands = {"addnote":check_addnote,"removenote":check_removenote,"connectnote":
             "nw":check_newword,"aw":check_appendword,"vw":check_viewword,"pw":check_pullword,"ew":check_eraseword,
             "dw":check_deleteword,"mw":check_modifyword,"cw":check_checkword,
 
-            "end":check_end}
+            "exit":check_end,"break":check_breaker}
 
 while True :
     command = input("> ")
+    log = open("data/log.txt","a",encoding="UTF-8")
+    log.write(str(datetime.datetime.now())+" : "+command+"\n")
+    log.close()
     splited = normalSplit(command," ")
     if splited[0] in commands.keys() :
         if len(splited) == 1 :

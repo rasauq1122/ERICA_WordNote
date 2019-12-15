@@ -168,4 +168,8 @@ def viewnote(print_mod):
                 if not int(command) > end :
                     index = int(command)
                     break
-            
+
+def breaker():
+    if getNNN() != "" :
+        os.remove(work_dir+"/"+getNNN()+".working-on.txt")
+        resetNNN()

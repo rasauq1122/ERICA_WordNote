@@ -1,9 +1,17 @@
-from module.decode_note import *
+from module.excute_note import *
+
+abc_rex = re.compile("[a-zA-Z` -]*")
+kor_rex = re.compile("[ㄱ-ㅎ가-힣()ㅏ-ㅣ 0-9]*")
+note_rex = re.compile("[a-zA-Z ㄱ-ㅎ가-힣()ㅏ-ㅣ0-9_.-]*")
 
 def check_notename(note_name):
     if note_name.strip() != note_name :
         print("단어장의 이름 양 끝에 공백이 있습니다.")
         return False
+    if note_rex.match(note_name).group() != note_name or note_name == "" :
+        print("단어장은 다음과 같은 정규표현식을 지켜야 합니다 : [a-zA-Z ㄱ-ㅎ가-힣()ㅏ-ㅣ0-9_.-]*")
+    if len(note_name) > 100 :
+        print("최대 100자까지만 사용할 수 있습니다.")
     return True
 
 def check_addnote(note_name):
@@ -140,3 +148,13 @@ def check_viewnote(setting):
         mod = True
     
     viewnote(mod)
+
+def check_breaker(setting):
+    if setting != "":
+        print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")
+        return
+    if getNNN() != "" :
+        print("접근한 단어장에서 강제로 벗어납니다. 단어장 이름 : "+getNNN())
+        breaker()
+    else :
+        print("접근한 단어장이 없습니다.")

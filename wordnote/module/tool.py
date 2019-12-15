@@ -1,5 +1,6 @@
 import os
 import re
+import datetime
 
 def checkLast(main_string,clue):
     clue_length = len(clue)
@@ -7,7 +8,7 @@ def checkLast(main_string,clue):
     return main_string[main_length-clue_length:] == clue
 
 now_dir = os.getcwd()
-directoies = ["/data","/module","/data/note","/data/star","/data/work","/view"]
+directoies = ["/data","/module","/data/note","/data/star","/data/work","/data/view"]
 main_dir = ""
 
 for key in directoies:
