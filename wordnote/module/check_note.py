@@ -127,3 +127,16 @@ def check_notelist(setting):
         print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")
         return
     notelist()
+
+def check_viewnote(setting):
+    if getNNN() == "":
+        print("접근한 단어장이 없습니다.")
+    if setting != "-print" and setting != "" :
+        print("해당 명령어는 -print 만을 옵션으로 넣을 수 있습니다.")
+        return
+    
+    mod = False
+    if setting == "-print":    
+        mod = True
+    
+    viewnote(mod)

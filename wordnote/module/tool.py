@@ -7,7 +7,7 @@ def checkLast(main_string,clue):
     return main_string[main_length-clue_length:] == clue
 
 now_dir = os.getcwd()
-directoies = ["/data","/module","/data/note","/data/star","/data/work"]
+directoies = ["/data","/module","/data/note","/data/star","/data/work","/view"]
 main_dir = ""
 
 for key in directoies:
@@ -21,6 +21,7 @@ module_dir = main_dir+directoies[1]
 note_dir = main_dir+directoies[2]
 star_dir = main_dir+directoies[3]
 work_dir = main_dir+directoies[4]
+view_dir = main_dir+directoies[5]
 
 start_view = "┌"+"─"*149+"┐"
 middle_view = "├"+"─"*149+"┤"
@@ -131,6 +132,7 @@ def kor_cut(string,length):
 
 def view_format(pre,str_list):
     good_len = 149-len_kor(pre)
+    printer = []
     def invis(string, mod):
         if mod == 0 :
             return string
@@ -139,7 +141,23 @@ def view_format(pre,str_list):
     
     length = len(str_list)
     for i in range(length) :
-        print("│"+invis(pre,i)+str_list[i]+" "*(good_len-len_kor(str_list[i]))+"│")
+        printer.append("│"+invis(pre,i)+str_list[i]+" "*(good_len-len_kor(str_list[i]))+"│")
+        print(printer[i])
+    return printer
+
+def make_format(pre,str_list):
+    good_len = 149-len_kor(pre)
+    printer = []
+    def invis(string, mod):
+        if mod == 0 :
+            return string
+        else :
+            return " "*len_kor(string)
+    
+    length = len(str_list)
+    for i in range(length) :
+        printer.append("│"+invis(pre,i)+str_list[i]+" "*(good_len-len_kor(str_list[i]))+"│")
+    return printer
 
 def getStarLine(index):
     star = open("data/star/STAR.txt","r",encoding="UTF-8")

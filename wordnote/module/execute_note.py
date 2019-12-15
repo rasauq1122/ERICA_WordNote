@@ -111,3 +111,61 @@ def mergenote(notelist,notename) :
 
 def notelist():
     print("단어장 목록 : "+glue(getNoteList(),", "))
+
+def viewnote(print_mod):
+    notename = getNNN()
+    nownote = open("data/work/"+notename+".working-on.txt","r",encoding="UTF-8")
+    lines = nownote.read().split("\n")
+    nownote.close()
+    while "" in lines :
+        lines.remove("")
+    printer = [start_view,make_format("",["단어장 : "+notename])[0],middle_view]
+    for now in lines :
+        printer.append(middle_view)
+        nowstar = mergeNoteLine(now)
+        nowword = nowstar.split(";")[1]
+        star_index = int(nowstar.split(";")[0])
+        note_index = int(now.split(";")[0])
+
+        printer = printer + make_format("",[str(note_index)+". "+nowword+" (STAR : "+str(star_index)+")"])
+        printer.append(middle_view)
+
+        view_list = makeview(nowstar)
+        class_list = ["n", "v", "a", "ad", "prep", "conj", "pron", "int"]
+        for i in range(8) :
+            splited = view_list[i].split(";")
+            james = []
+            for now in splited :
+                james = james + kor_cut(now,149-len(class_list[i])-2)
+            printer = printer + make_format(class_list[i]+". ",james)
+    printer.append(end_view)
+
+    index = 0
+    end = (len(printer)-1)//44
+    
+    if print_mod :
+        viewnote = open("view/"+notename+".view.txt","w",encoding="UTF-8")
+        viewnote.write(glue(printer,"\n")+"\n")
+        viewnote.close()
+
+    while index <= end :
+        subprinter = printer[44*index:44*(index+1)]
+        for now in subprinter :
+            print(now)
+        while True :
+            command = input("( "+str(index)+" / "+str(end)+" ) ")
+            if command == "" :
+                index = index+1
+                break
+            elif command == "q" :
+                index = end+1
+                break
+            elif command == "b" :
+                if index != 0 :
+                    index = index-1
+                break
+            elif command.isdecimal() :
+                if not int(command) > end :
+                    index = int(command)
+                    break
+            
