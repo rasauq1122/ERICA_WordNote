@@ -53,3 +53,34 @@ def end():
     import sys
     print("프로그램을 종료합니다.")
     sys.exit()
+
+def mergenote(notelist,notename) :
+    merged = {}
+    for now in notelist :
+        now_note = open("data/note/"+now+".wordnote.txt","r",encoding="UTF-8")
+        notelines = now_note.read().split("\n")
+        now_note.close()
+        for nowline in notelines :
+            if nowline != "":
+                james = nowline.split(";WordAt")[1].split(";")
+                james.remove("")
+                length = len(james)
+
+                for i in range(length) :
+                    james[i] = int(james[i])
+
+                if not james[0] in merged.keys() :
+                    merged[james[0]] = set()
+                merged[james[0]].update(james[1:])
+    
+    merged_key = list(merged.keys())
+    merged_key.sort()
+    merged_note = open("data/note/"+notename+".wordnote.txt","w",encoding="UTF-8")
+    length = len(merged_key)
+
+    for i in range(length) :
+        line = str(i) + ";WordAt" + str(merged_key[i]) + ";" + glue(list(merged[merged_key[i]]),";") + ";\n"
+        merged_note.write(line)
+    
+    merged_note.close()
+    print("성공적으로 단어장를 합병했습니다. 단어장 이름 : "+notename)

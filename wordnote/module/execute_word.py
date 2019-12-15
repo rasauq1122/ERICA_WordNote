@@ -38,7 +38,7 @@ def newword(wordlist):
     print("새로운 단어를 등록했습니다 : "+wordlist[0])
     index_list = list(range(len(star_linelist[count].split("MEANING;"))-1))
 
-    if getNNN() != "" and get_yes_or_no("현재 단어장 ("+getNNN()+") 에 단어를 추가합니까?") :
+    if getNNN() != "" :
         working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
         working_note_lines = working_note.read().split("\n")
         working_note.close()
@@ -49,7 +49,7 @@ def newword(wordlist):
         working_note = open("data/work/"+getNNN()+".working-on.txt","w",encoding="UTF-8")
         working_note.write(glue(working_note_lines,"\n")+"\n")
         working_note.close()
-        print("단어장에 새로운 단어를 등록했습니다.")
+        print("단어장("+getNNN()+")에 새로운 단어를 등록했습니다.")
 
 def appendword(wordlist):
     star = open("data/star/STAR.txt","r",encoding="UTF-8")
@@ -79,9 +79,9 @@ def appendword(wordlist):
     star = open("data/star/STAR.txt","w",encoding="UTF-8")
     star.write(glue(meanings,"\n"))
     star.close()
-    print("기존 단어에 새로운 뜻을 등록했습니다 : "+wordname)
+    print("단어장("+getNNN()+")에 새로운 뜻을 추가했습니다 : "+wordname)
 
-    if getNNN() != "" and get_yes_or_no("현재 단어장 ("+getNNN()+") 에 등록한 뜻을 추가합니까?") :
+    if getNNN() != "" :
         if findAtNote(wordlist[0]) == -1 :
             working_note = open("data/work/"+getNNN()+".working-on.txt","r",encoding="UTF-8")
             working_note_lines = working_note.read().split("\n")

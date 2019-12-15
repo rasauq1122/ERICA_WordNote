@@ -1,11 +1,16 @@
 from module.decode_note import *
 
+def check_notename(note_name):
+    if note_name.strip() != note_name :
+        print("단어장의 이름 양 끝에 공백이 있습니다.")
+        return False
+    return True
+
 def check_addnote(note_name):
     if note_name == "" :
         print("단어장의 이름은 최소 한 글자 이상이어야 합니다.")
         return
-    if note_name.find(".wordnote.txt") != -1 :
-        print("예약어는 단어장의 이름으로 사용할 수 없습니다.")
+    if not check_notename(note_name) :
         return
     notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
     notelist_reading = notelist.read()
@@ -68,3 +73,51 @@ def check_end(setting):
     else :
         print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")
         return
+
+def check_mergenote(setting): # asd, asdd, addd -name merged
+    splited = setting.split(" -")
+    mergelist = splited[0].split(",")
+    log = []
+    notelist = getNoteList()
+    if getNNN() != "" :
+        print("접속 중인 단어장이 있으면 사용할 수 없는 명령어입니다.")
+        return
+    for now in mergelist :
+        if not now.strip() in notelist :
+            print("알 수 없는 단어장입니다 : "+now.strip())
+            return
+        if not now.strip() in log :
+            log.append(now.strip())
+    
+    if len(log) <= 1 :
+        print("합병하고자 하는 단어장의 갯수가 최소 2개 이상이어야 합니다.")
+        return
+
+    mod = 0
+
+    mod_option = ["name"]
+    length = len(splited)
+    for i in range(1,length) :
+        now = splited[i].split(" ")[0].strip()
+        if not now in mod_option :
+            print("알 수 없는 옵션입니다 : "+splited[i].split(" ")[0].strip())
+            return
+        if mod != 0 :
+            print("이 명령어에서 모드 옵션은 동시에 하나만 적용할 수 있습니다.")
+            return
+        if now == "name" :
+            k = normalSplit(now.strip()," ")
+            if len(k) == 1:
+                print("name 옵션은 하나의 문자열을 인수로 받습니다.")
+                return
+            if not check_notename(k) :
+                return
+            mod = k
+    
+    if mod == 0 :
+        sub_command = input("합병된 단어장의 새 이름을 입력해주세요. ")
+        if not check_notename(sub_command) :
+            return
+        mod = sub_command
+
+    mergenote(log,sub_command)

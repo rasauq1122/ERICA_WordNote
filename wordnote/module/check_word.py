@@ -180,7 +180,7 @@ def check_pullword(setting):
     
     mod_option = ["all","opt"]
     length = len(splited)
-    max_meaning = len(getStarLine(star_index).split("MEANING;"))
+    max_meaning = len(getStarLine(star_index).split("MEANING;"))-1
     for i in range(1,length) :
         now = splited[i].split(" ")[0].strip()
         if not now in mod_option :
@@ -196,8 +196,8 @@ def check_pullword(setting):
             mod = 1
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                    print("opt 옵션은 정수를 인수로 갖어야 합니다.")
-                    return
+                print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not check_canpull(detail_list,max_meaning,star_index,splited[0]) :
                 return
@@ -268,8 +268,8 @@ def check_eraseword(setting):
             mod = 1
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                    print("opt 옵션은 정수를 인수로 갖어야 합니다.")
-                    return
+                print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not check_canerase(detail_list,james) :
                 return
@@ -316,7 +316,7 @@ def check_deleteword(setting):
 
     mod_option = ["all","opt"]
     length = len(splited)
-    max_meaning = len(getStarLine(star_index).split("MEANING;"))
+    max_meaning = len(getStarLine(star_index).split("MEANING;"))-1
     for i in range(1,length) :
         now = splited[i].split(" ")[0].strip()
         if not now in mod_option :
@@ -332,8 +332,8 @@ def check_deleteword(setting):
             mod = 1
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                    print("opt 옵션은 정수를 인수로 갖어야 합니다.")
-                    return
+                print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
                 return
@@ -403,7 +403,7 @@ def check_modifyword(setting):
 
     mod_option = ["opt"]
     length = len(splited)
-    max_meaning = len(getStarLine(star_index).split("MEANING;"))
+    max_meaning = len(getStarLine(star_index).split("MEANING;"))-1
     for i in range(1,length) :
         now = splited[i].split(" ")[0].strip()
         if not now in mod_option :
