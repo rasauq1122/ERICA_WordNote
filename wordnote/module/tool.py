@@ -168,7 +168,7 @@ def makeview(string): # STAR 형식만 받음
         length2 = len(meaning_split)
         for j in range(2,length2-1) :
             view[now_class] = view[now_class] + ", " + meaning_split[j]
-            
+
         if len(parts) == 2 :
             tag_split = parts[1].split(";")
             view[now_class] = view[now_class] + " # tag : " + tag_split[0]
@@ -222,6 +222,8 @@ def mergeNoteLine(string): # note 형식만 받음
 def getNoteList():
     notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
     splited = notelist.read().split("\n")
+    while "" in splited :
+        splited.remove("")
     notelist.close()
     return splited
 

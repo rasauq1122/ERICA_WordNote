@@ -4,23 +4,33 @@ def addnote(note_name):
     note = open("data/note/"+note_name+".wordnote.txt","w",encoding="UTF-8")
     note.close()
     notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
-    okay_append = notelist.read().find(note_name+"\n") == -1
+    notelist_lines = notelist.read().split("\n")
     notelist.close()
-    if okay_append :
-        notelist = open("data/star/NOTELIST.txt","a",encoding="UTF-8")
-        notelist.write(note_name+"\n")
-        notelist.close()
+    length = len(notelist_lines)
+    for i in range(length) :
+        if notelist_lines[i] == "" :
+            notelist_lines[i] = note_name
+            break
+    notelist = open("data/star/NOTELIST.txt","w",encoding="UTF-8")
+    notelist.write(glue(notelist_lines,"\n"))
+    if not "" in notelist_lines :
+        notelist.write("\n")
+    notelist.close()
     print("성공적으로 단어장를 만들었습니다. 단어장 이름 : "+note_name)
 
 def removenote(note_name):
     notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
-    notelist_reading = notelist.read()
+    notelist_lines = notelist.read().split("\n")
     notelist.close()
-    notelist_writing = normalSplit(notelist_reading,note_name+"\n")[0]
-    if len(normalSplit(notelist_reading,note_name+"\n")) == 2 :
-        notelist_writing = notelist_writing + normalSplit(notelist_reading,note_name+"\n")[1]
+    length = len(notelist_lines)
+    for i in range(length) :
+        if notelist_lines[i] == note_name :
+            notelist_lines[i] = ""
+            break
+    if notelist_lines[length-1] == "" :
+        notelist_lines = notelist_lines[:length-1]
     notelist = open("data/star/NOTELIST.txt","w",encoding="UTF-8")
-    notelist.write(notelist_writing)
+    notelist.write(glue(notelist_lines,"\n")+"\n")
     notelist.close()
     os.remove(note_dir+"/"+note_name+".wordnote.txt")
     print("성공적으로 단어장을 삭제하였습니다. 단어장 이름 : "+note_name)
@@ -82,5 +92,22 @@ def mergenote(notelist,notename) :
         line = str(i) + ";WordAt" + str(merged_key[i]) + ";" + glue(list(merged[merged_key[i]]),";") + ";\n"
         merged_note.write(line)
     
+    notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
+    notelist_lines = notelist.read().split("\n")
+    notelist.close()
+    length = len(notelist_lines)
+    for i in range(length) :
+        if notelist_lines[i] == "" :
+            notelist_lines[i] = note_name
+            break
+    notelist = open("data/star/NOTELIST.txt","w",encoding="UTF-8")
+    notelist.write(glue(notelist_lines,"\n"))
+    if not "" in notelist_lines :
+        notelist.write("\n")
+    notelist.close()
+
     merged_note.close()
     print("성공적으로 단어장를 합병했습니다. 단어장 이름 : "+notename)
+
+def notelist():
+    print("단어장 목록 : "+glue(getNoteList(),", "))

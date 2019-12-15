@@ -121,3 +121,9 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
         mod = sub_command
 
     mergenote(log,sub_command)
+
+def check_notelist(setting):
+    if setting != "":
+        print("해당 명령어는 어떤 옵션도 넣을 수 없습니다.")
+        return
+    notelist()
