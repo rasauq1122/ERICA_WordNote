@@ -1,4 +1,4 @@
-from module.excute_note import *
+from module.execute_note import *
 
 abc_rex = re.compile("[a-zA-Z` -]*")
 kor_rex = re.compile("[ㄱ-ㅎ가-힣()ㅏ-ㅣ 0-9]*")

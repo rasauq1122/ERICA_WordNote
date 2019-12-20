@@ -8,7 +8,7 @@ def check_meaningoption(splited):
     meaning_list = []
     meansomething = False
     meaning_option = ["n","v","a","ad","prep","conj","pron","int"]
-    tag_option = ["tag"]
+    tag_option = []
     length = len(splited)
 
     for i in range(1,length) :
