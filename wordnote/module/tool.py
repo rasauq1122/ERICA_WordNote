@@ -30,8 +30,14 @@ end_view = "└"+"─"*149+"┘"
 
 def get_yes_or_no(notice):
     check = input(notice+" [y/n] ")
+    log = open("data/log.txt","a",encoding="UTF-8")
+    log.write(str(datetime.datetime.now())+" : "+check+"\n")
+    log.close()
     while not check in ["y","yes","n","no"] :
         check = input("다음 중 하나를 입력해주세요. [y, yes, n, no] ")
+        log = open("data/log.txt","a",encoding="UTF-8")
+        log.write(str(datetime.datetime.now())+" : "+check+"\n")
+        log.close()
         if check.strip().isalpha() :
             check = check.strip().lower()
         else :
@@ -268,3 +274,8 @@ def sortbynumber(can_int_str_list) :
     for i in range(length) :
         can_int_str_list[i] = str(can_int_str_list[i])
     return can_int_str_list
+
+def make_log(string):
+    log = open("data/log.txt","a",encoding="UTF-8")
+    log.write(str(datetime.datetime.now())+" : "+string+"\n")
+    log.close()

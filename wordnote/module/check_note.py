@@ -124,6 +124,7 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
     
     if mod == 0 :
         sub_command = input("합병된 단어장의 새 이름을 입력해주세요. ")
+        make_log(sub_command)
         if not check_notename(sub_command) :
             return
         mod = sub_command

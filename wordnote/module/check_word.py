@@ -206,6 +206,7 @@ def check_pullword(setting):
     if mod == 0 :
         viewword(splited[0],[True])
         sub_command = input("STAR에서 가져오고자 하는 단어의 뜻 번호를 입력해주세요 : ")
+        make_log(sub_command)
         detail_list = sub_command.split(",")
         if not check_canpull(detail_list,max_meaning,star_index,splited[0]) :
             return
@@ -278,6 +279,7 @@ def check_eraseword(setting):
     if mod == 0 :
         viewword(splited[0],[False])
         sub_command = input("지우고자 하는 단어의 뜻 번호를 입력해주세요 : ")
+        make_log(sub_command)
         detail_list = sub_command.split(",")
         if not check_canerase(detail_list,james) :
             return
@@ -342,6 +344,7 @@ def check_deleteword(setting):
     if mod == 0 :
         viewword(splited[0],[True])
         sub_command = input("STAR에서 지우고자 하는 단어의 뜻 번호를 입력해주세요 : ")
+        make_log(sub_command)
         detail_list = sub_command.split(",")
         if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
             return
@@ -427,6 +430,7 @@ def check_modifyword(setting):
     if mod == 0 :
         viewword(splited[0],[True])
         sub_command = input("STAR에서 수정하고자 하는 단어의 뜻 번호 하나를 입력해주세요 : ")
+        make_log(sub_command)
         detail_list = sub_command.split(",")
         if not len(detail_list) == 1 :
             print("opt 옵션은 하나의 정수만을 인수로 갖어야 합니다.")
@@ -456,6 +460,7 @@ def check_modifyword(setting):
     print(end_view)
 
     next_command = input("수정할 내용을 입력해주세요. ")
+    make_log(next_command)
     overlay = -1
     if next_command == "":
         print("주어진 입력이 없습니다.")

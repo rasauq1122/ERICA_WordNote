@@ -154,6 +154,7 @@ def viewnote(print_mod):
             print(now)
         while True :
             command = input("( "+str(index)+" / "+str(end)+" ) ")
+            make_log(command)
             if command == "" :
                 index = index+1
                 break
