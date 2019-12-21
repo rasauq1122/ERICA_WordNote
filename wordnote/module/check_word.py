@@ -101,7 +101,7 @@ def check_appendword(command):
             return
     else :
         return
-        
+
     length = len(splited)
     if length == 1 :
         print("의미 옵션을 추가해주세요.")
@@ -153,12 +153,12 @@ def check_viewword(setting):
 def check_canpull(str_list,max_meaning,star_index,word):
     for now_detail in str_list :
         if not now_detail.strip().isdecimal() :
-            print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
+            print("opt 옵션은 정수를 인수로 가져야 합니다 : "+now_detail.strip())
             return False
         if int(now_detail.strip()) >= max_meaning :
             print("영단어 "+word+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
             return False
-        if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL" :
+        if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL;" :
             print("영단어 "+word+"의 "+now_detail.strip()+"번째 뜻은 null 값으로 지정할 수 없습니다.")
             return False
     return True
@@ -196,7 +196,7 @@ def check_pullword(setting):
             mod = 1
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                print("opt 옵션은 정수를 인수로 가져야 합니다.")
                 return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not check_canpull(detail_list,max_meaning,star_index,splited[0]) :
@@ -225,7 +225,7 @@ def check_pullword(setting):
 def check_canerase(str_list, james):
     for now_detail in str_list :
         if not now_detail.strip().isdecimal() :
-            print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
+            print("opt 옵션은 정수를 인수로 가져야 합니다 : "+now_detail.strip())
             return False
         if not now_detail.strip() in james :
             print("접속중인 단어장에 참조되지 않은 단어의 뜻은 지울 수 없습니다.")
@@ -269,7 +269,7 @@ def check_eraseword(setting):
             mod = 1
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                print("opt 옵션은 정수를 인수로 가져야 합니다.")
                 return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not check_canerase(detail_list,james) :
@@ -295,10 +295,13 @@ def check_eraseword(setting):
 def check_candelete(str_list,max_meaning,star_index,word):
     for now_detail in str_list :
         if not now_detail.strip().isdecimal() :
-            print("opt 옵션은 정수를 인수로 갖어야 합니다 : "+now_detail.strip())
+            print("opt 옵션은 정수를 인수로 가져야 합니다 : "+now_detail.strip())
             return False
         if int(now_detail.strip()) >= max_meaning :
             print("영단어 "+word+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
+            return False
+        if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL;" :
+            print("영단어 "+word+"의 "+now_detail.strip()+"번째 뜻은 null 값으로 지정할 수 없습니다.")
             return False
     return True
 
@@ -334,7 +337,7 @@ def check_deleteword(setting):
             mod = 1
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                print("opt 옵션은 정수를 인수로 갖어야 합니다.")
+                print("opt 옵션은 정수를 인수로 가져야 합니다.")
                 return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
@@ -417,11 +420,11 @@ def check_modifyword(setting):
             return
         if now == "opt" :
             if len(splited[i].split(" ")) == 1:
-                    print("opt 옵션은 하나의 정수만을 인수로 갖어야 합니다.")
+                    print("opt 옵션은 하나의 정수만을 인수로 가져야 합니다.")
                     return
             detail_list = normalSplit(splited[i]," ")[1].split(",")
             if not len(detail_list) == 1 :
-                print("opt 옵션은 하나의 정수만을 인수로 갖어야 합니다.")
+                print("opt 옵션은 하나의 정수만을 인수로 가져야 합니다.")
                 return
             if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
                 return
@@ -433,7 +436,7 @@ def check_modifyword(setting):
         make_log(sub_command)
         detail_list = sub_command.split(",")
         if not len(detail_list) == 1 :
-            print("opt 옵션은 하나의 정수만을 인수로 갖어야 합니다.")
+            print("opt 옵션은 하나의 정수만을 인수로 가져야 합니다.")
             return
         if not check_candelete(detail_list,max_meaning,star_index,splited[0]) :
             return

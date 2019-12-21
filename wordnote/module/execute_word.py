@@ -101,7 +101,6 @@ def appendword(wordlist):
         return
     print("단어장에 새로운 뜻을 추가했습니다 :"+wordname)
 
-
 def viewword(word,modlist):
     nowword = word
     star_index = findAtStar(nowword)
@@ -248,14 +247,11 @@ def decode_modifyword(next_command, star_index, modi_index, overlay):
         return now_line.split("tag;")[0]+glue(log,";")+";"
     
     now_line = now_line.split(";tag")[0].split(";")
-    print(now_line)
     for now in log :
         now_line.remove(now)
-    print(now_line)
     if len(now_line) <= 2 :
         return "NULL;"
-
-    return glue(now_line,";")+";"
+    return glue(now_line,";")
 
 def modifyword(next_command, star_index, modi_index, overlay):
     star = open("data/star/STAR.txt","r",encoding="UTF-8")
