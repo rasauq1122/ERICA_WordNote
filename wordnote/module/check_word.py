@@ -90,18 +90,18 @@ def check_newword(command):
 def check_appendword(command):
     splited = command.split(" -")
     
-    if not check_word(splited[0]) :
-        return
     if splited[0].isdecimal() :
         if not findAtStar_index(int(splited[0])) :
             print("해당 인덱스에 등록된 단어가 없습니다.")
             return
-    else :
+    elif check_word(splited[0]) :
         if findAtStar(splited[0]) == -1 :
             print("등록되지 않는 영단어입니다 : "+splited[0])
             print("해당 영단어를 등록하고 싶다면 newword 명령어를 사용하세요.")
             return
-
+    else :
+        return
+        
     length = len(splited)
     if length == 1 :
         print("의미 옵션을 추가해주세요.")

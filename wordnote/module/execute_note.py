@@ -144,7 +144,7 @@ def viewnote(print_mod):
     end = (len(printer)-1)//44
     
     if print_mod :
-        viewnote = open("view/"+notename+".view.txt","w",encoding="UTF-8")
+        viewnote = open("data/view/"+notename+".view.txt","w",encoding="UTF-8")
         viewnote.write(glue(printer,"\n")+"\n")
         viewnote.close()
 

@@ -56,7 +56,6 @@ def appendword(wordlist):
     meanings = star.read().split("\n")
     star.close()
     splited = meanings[wordlist[0]].split("MEANING;")
-    print(giveword(wordlist))
     james = giveword(wordlist).split("MEANING;")
     wordname = meanings[wordlist[0]].split("MEANING;")[0].split(";")[1]
     while "" in james :
@@ -79,7 +78,6 @@ def appendword(wordlist):
     star = open("data/star/STAR.txt","w",encoding="UTF-8")
     star.write(glue(meanings,"\n"))
     star.close()
-    print("단어장("+getNNN()+")에 새로운 뜻을 추가했습니다 : "+wordname)
 
     if getNNN() != "" :
         if findAtNote(wordlist[0]) == -1 :
@@ -98,8 +96,11 @@ def appendword(wordlist):
             working_note_lines[index] = working_note_lines[index] + glue(index_list,";") + ";" 
         working_note = open("data/work/"+getNNN()+".working-on.txt","w",encoding="UTF-8")
         working_note.write(glue(working_note_lines,"\n"))
-        working_note.close()    
-        print("단어장에 새로운 뜻을 등록했습니다.")        
+        working_note.close()        
+        print("단어장("+getNNN()+")에 새로운 뜻을 추가했습니다 : "+wordname)
+        return
+    print("단어장에 새로운 뜻을 추가했습니다 :"+wordname)
+
 
 def viewword(word,modlist):
     nowword = word
@@ -140,7 +141,7 @@ def pullword(index,star_index,pointers):
     
     for now in james :
         if now.strip() != "" and not now.strip() in pointers:
-            pointers = pointers + [now.stirp()]
+            pointers = pointers + [now.strip()]
     
     pointers = sortbynumber(pointers)
 

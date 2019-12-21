@@ -100,8 +100,8 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
         if not now.strip() in log :
             log.append(now.strip())
     
-    if len(log) <= 1 :
-        print("합병하고자 하는 단어장의 갯수가 최소 2개 이상이어야 합니다.")
+    if len(log) == 0 :
+        print("합병하고자 하는 단어장의 갯수가 최소 1개 이상이어야 합니다.")
         return
 
     mod = 0
@@ -132,6 +132,13 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
             return
         mod = sub_command
 
+    if mod in log :
+        print("합병하고자 하는 단어장의 이름은 합병하려고 하는 단어장의 이름과 같아서는 안됩니다.")
+        return
+
+    if mod in getNoteList() and not get_yes_or_no("이미 같은 이름의 단어장이 존재합니다. 지우고 새로 만들까요?") :
+        return
+    
     mergenote(log,mod)
 
 def check_notelist(setting):
