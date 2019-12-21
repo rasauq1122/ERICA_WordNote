@@ -118,7 +118,7 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
             return
         if now == "name" :
             k = splited[i].split(" ")
-            if len(k) == 2:
+            if len(k) != 2:
                 print("name 옵션은 하나의 문자열을 인수로 받습니다.")
                 return
             if not check_notename(k[1]) :
@@ -132,7 +132,7 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
             return
         mod = sub_command
 
-    mergenote(log,sub_command)
+    mergenote(log,mod)
 
 def check_notelist(setting):
     if setting != "":
