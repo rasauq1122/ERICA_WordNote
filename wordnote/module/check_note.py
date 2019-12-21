@@ -10,8 +10,10 @@ def check_notename(note_name):
         return False
     if note_rex.match(note_name).group() != note_name or note_name == "" :
         print("단어장은 다음과 같은 정규표현식을 지켜야 합니다 : [a-zA-Z ㄱ-ㅎ가-힣()ㅏ-ㅣ0-9_.-]*")
+        return False
     if len(note_name) > 100 :
         print("최대 100자까지만 사용할 수 있습니다.")
+        return False
     return True
 
 def check_addnote(note_name):
@@ -29,6 +31,7 @@ def check_addnote(note_name):
             addnote(note_name)
         else :
             print("단어장을 새로 만들지 못했습니다.")
+            return
     else :
         addnote(note_name)
 
@@ -114,13 +117,13 @@ def check_mergenote(setting): # asd, asdd, addd -name merged
             print("이 명령어에서 모드 옵션은 동시에 하나만 적용할 수 있습니다.")
             return
         if now == "name" :
-            k = normalSplit(now.strip()," ")
-            if len(k) == 1:
+            k = splited[i].split(" ")
+            if len(k) == 2:
                 print("name 옵션은 하나의 문자열을 인수로 받습니다.")
                 return
-            if not check_notename(k) :
+            if not check_notename(k[1]) :
                 return
-            mod = k
+            mod = k[1]
     
     if mod == 0 :
         sub_command = input("합병된 단어장의 새 이름을 입력해주세요. ")
@@ -140,6 +143,7 @@ def check_notelist(setting):
 def check_viewnote(setting):
     if getNNN() == "":
         print("접근한 단어장이 없습니다.")
+        return
     if setting != "-print" and setting != "" :
         print("해당 명령어는 -print 만을 옵션으로 넣을 수 있습니다.")
         return
