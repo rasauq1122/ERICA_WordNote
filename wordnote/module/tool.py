@@ -264,7 +264,7 @@ def isNoteHaving(note_name,star_index):
                 break
     return havings
 
-def sortbynumber(can_int_str_list) :
+def sortbynumber(can_int_str_list):
     length = len(can_int_str_list)
     for i in range(length) :
         if not can_int_str_list[i].isdecimal() :
@@ -279,3 +279,35 @@ def make_log(string):
     log = open("data/log.txt","a",encoding="UTF-8")
     log.write(str(datetime.datetime.now())+" : "+string+"\n")
     log.close()
+
+def makeview2(noteline):
+    starline = mergeNoteLine(noteline)
+    class_dictionary = {"n":1, "v":2, "a":3, "ad":4, "prep":5, "conj":6, "pron": 7, "int": 8, "NULL" : 9} 
+    note_sp = normalSplit(noteline,";WordAt")[1].split(";")[1:]
+    splited = starline.split("MEANING;")
+    length = len(splited)
+    view = ["","","","","","","",""]
+    
+    for i in range(1,length) :
+        parts = splited[i].split("tag;")
+        meaning_part = parts[0]
+        meaning_split = meaning_part.split(";")
+        now_class = class_dictionary[meaning_split[0]]-1
+        if now_class == 8 :
+            continue
+        view[now_class] = view[now_class] + "(" + note_sp[i-1] + ") " + meaning_split[1]
+        
+        length2 = len(meaning_split)
+        for j in range(2,length2-1) :
+            view[now_class] = view[now_class] + ", " + meaning_split[j]
+
+        if len(parts) == 2 :
+            tag_split = parts[1].split(";")
+            view[now_class] = view[now_class] + " # tag : " + tag_split[0]
+            
+            length2 = len(tag_split)
+            for j in range(1,length2-1) :
+                view[now_class] = view[now_class] + ", " + tag_split[j]
+        view[now_class] = view[now_class] + ";"
+
+    return view

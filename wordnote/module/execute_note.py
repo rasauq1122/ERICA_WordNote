@@ -96,10 +96,11 @@ def mergenote(notelist,notename) :
     notelist_lines = notelist.read().split("\n")
     notelist.close()
     length = len(notelist_lines)
-    for i in range(length) :
-        if notelist_lines[i] == "" :
-            notelist_lines[i] = notename
-            break
+    if not notename in getNoteList() :
+        for i in range(length) :
+            if notelist_lines[i] == "" :
+                notelist_lines[i] = notename
+                break
     notelist = open("data/star/NOTELIST.txt","w",encoding="UTF-8")
     notelist.write(glue(notelist_lines,"\n"))
     if not "" in notelist_lines :

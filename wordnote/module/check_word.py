@@ -277,7 +277,7 @@ def check_eraseword(setting):
             mod = 2
 
     if mod == 0 :
-        viewword(splited[0],[False])
+        viewword(splited[0],[False,False])
         sub_command = input("지우고자 하는 단어의 뜻 번호를 입력해주세요 : ")
         make_log(sub_command)
         detail_list = sub_command.split(",")
