@@ -158,7 +158,7 @@ def check_canpull(str_list,max_meaning,star_index,word):
         if int(now_detail.strip()) >= max_meaning :
             print("영단어 "+word+"의 최대 뜻 번호는 "+str(max_meaning-1)+" 입니다.")
             return False
-        if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1] == "NULL;" :
+        if getStarLine(star_index).split("MEANING;")[int(now_detail.strip())+1].split("\n")[0] == "NULL;" :
             print("영단어 "+word+"의 "+now_detail.strip()+"번째 뜻은 null 값으로 지정할 수 없습니다.")
             return False
     return True
