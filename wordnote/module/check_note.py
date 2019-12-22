@@ -22,10 +22,7 @@ def check_addnote(note_name):
         return
     if not check_notename(note_name) :
         return
-    notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
-    notelist_reading = notelist.read()
-    notelist.close()
-    if notelist_reading.find(note_name+"\n") != -1 :
+    if note_name in getNoteList() :
         okay = get_yes_or_no("이미 같은 이름의 단어장이 존재합니다. 지우고 새로 만들까요?")
         if okay :
             addnote(note_name)
@@ -36,13 +33,10 @@ def check_addnote(note_name):
         addnote(note_name)
 
 def check_removenote(note_name):
-    notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
-    notelist_reading = notelist.read()
-    notelist.close()
     if getNNN() != "":
         print("접속 중인 단어장이 있으면 사용할 수 없는 명령어입니다.")
         return
-    if notelist_reading.find(note_name+"\n") != -1 and os.path.isfile(note_dir+"/"+note_name+".wordnote.txt") :
+    if note_name in getNoteList() and os.path.isfile(note_dir+"/"+note_name+".wordnote.txt") :
         if get_yes_or_no("정말 단어장을 삭제할까요?") :
             removenote(note_name)
         else :
