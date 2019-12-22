@@ -1,16 +1,17 @@
 from module.tool import *
 
-def addnote(note_name):
+def addnote(note_name,addatnotelist):
     note = open("data/note/"+note_name+".wordnote.txt","w",encoding="UTF-8")
     note.close()
     notelist = open("data/star/NOTELIST.txt","r",encoding="UTF-8")
     notelist_lines = notelist.read().split("\n")
     notelist.close()
-    length = len(notelist_lines)
-    for i in range(length) :
-        if notelist_lines[i] == "" :
-            notelist_lines[i] = note_name
-            break
+    if addatnotelist :
+        length = len(notelist_lines)
+        for i in range(length) :
+            if notelist_lines[i] == "" :
+                notelist_lines[i] = note_name
+                break
     notelist = open("data/star/NOTELIST.txt","w",encoding="UTF-8")
     notelist.write(glue(notelist_lines,"\n"))
     if not "" in notelist_lines :

@@ -25,12 +25,12 @@ def check_addnote(note_name):
     if note_name in getNoteList() :
         okay = get_yes_or_no("이미 같은 이름의 단어장이 존재합니다. 지우고 새로 만들까요?")
         if okay :
-            addnote(note_name)
+            addnote(note_name,False)
         else :
             print("단어장을 새로 만들지 못했습니다.")
             return
     else :
-        addnote(note_name)
+        addnote(note_name,True)
 
 def check_removenote(note_name):
     if getNNN() != "":
